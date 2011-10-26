@@ -1,0 +1,18 @@
+2011 Oct created
+
+Create Java instances from Strings
+
+e.g. given the input
+  (new java.util.Date (new java.lang.long "123456789"))
+returns 
+  instance of java.util.Date
+
+It uses antlr to define the "language" of the String input.
+
+Capable of creating objects that have constructors that take:
+  * no arguments (void)
+  * String arguments
+  * List arguments
+  * Array arguments
+  * Object arguments that can be created by using these rules
+
