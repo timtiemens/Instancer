@@ -29,6 +29,8 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.antlr.runtime.ANTLRInputStream;
@@ -71,6 +73,49 @@ public class InstancerUT
         
         return names;
     }
+   
+    public void testSomeFails()
+    {
+        //runOnFails("(new fails 1 2 3)");
+    }
+    
+    private void runOnFails(String s)
+    {
+        runOn(s);
+    }
+    
+    private void runOn(String s)
+    {
+        runOn(new String[] { s });
+    }
+    
+    private void runOn(String[] input)
+    {
+        InstancerParser test;
+
+        try 
+        {
+            test = InstancerParser.create(input);
+            
+            List<Object> thelist = test.top();
+
+            Object zero = thelist.get(0);
+            Assert.assertNotNull(zero);
+            System.out.println("Test result=" + zero);
+        } 
+        catch (RecognitionException e)  
+        {
+            e.printStackTrace();
+            Assert.fail("Threw exception");
+        }
+        catch (Exception e)
+        {
+            Assert.fail("Did not parse, e=" + e);
+        }
+
+    }
+    
+    
     public static ANTLRReaderStream getReaderStream(String[] args) throws Exception
     {
         ANTLRReaderStream input = null;
@@ -117,43 +162,5 @@ public class InstancerUT
             input = new ANTLRInputStream(System.in);
         }
         return input;
-    }    
-    public void testSomeFails()
-    {
-        //runOnFails("(new fails 1 2 3)");
-    }
-    
-    private void runOnFails(String s)
-    {
-        runOn(s);
-    }
-    private void runOn(String s)
-    {
-        runOn(new String[] { s });
-    }
-    private void runOn(String[] input)
-    {
-        InstancerParser test;
-
-        try 
-        {
-            test = InstancerParser.create(input);
-            
-            List<Object> thelist = test.top();
-            
-            Object zero = thelist.get(0);
-            Assert.assertNotNull(zero);
-            
-        } 
-        catch (RecognitionException e)  
-        {
-            e.printStackTrace();
-            Assert.fail("Threw exception");
-        }
-        catch (Exception e)
-        {
-            Assert.fail("Did not parse, e=" + e);
-        }
-
-    }
+    } 
 }

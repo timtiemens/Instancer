@@ -120,7 +120,7 @@ initStatementChoice
     ;  
    
 topInner returns [Object value]
-    : '(' cmd=command clz=classname args=topInner? ')' { $value = instancerCode.create($cmd.value, $clz.value, $args.value); }
+    : '(' cmd=command clz=classname args=topInner* ')' { $value = instancerCode.create($cmd.value, $clz.value, $args.value); }
     | c=QUOTEDLITERAL                                  { $value = instancerCode.unescape(c.getText()); }
     ;
     

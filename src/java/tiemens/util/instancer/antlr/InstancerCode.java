@@ -89,18 +89,35 @@ public class InstancerCode
                          final Object argobj)
     {
         Object ret;
-        ret = new String("Instancer[cmd='" + command + 
+        ret = new String("**ERROR** InstancerCode[cmd='" + command + 
                          "' clzname='" + clzname + 
                          "' arg='" + argobj + "']");
+
+        System.out.println("clzname='" + clzname + "'");
+        System.out.print("argobj.class=");
+        if (argobj != null)
+        {
+            System.out.println(argobj.getClass().getName());
+        }
+        else
+        {
+            System.out.println("null");
+        }
+        System.out.println("argobj=" + argobj);
 
         if ("new".equals(command))
         {
             ret =  createNew(clzname, argobj);
         }
+        else if ("list".equals(command))
+        {
+            ret = createList(clzname, argobj);
+        }
         
         return ret;
     }
 
+    
     // ==================================================
     // non public methods
     // ==================================================
@@ -108,10 +125,6 @@ public class InstancerCode
     private Object createNew(String clzname, 
                              Object argobj) 
     {
-        System.out.println("clzname='" + clzname + "'");
-        System.out.println("argobj.class=" + argobj.getClass().getName());
-        System.out.println("argobj=" + argobj);
-        
         Object ret = null;
         try 
         {
@@ -127,7 +140,7 @@ public class InstancerCode
         {
             System.out.println("Could not find class '" + clzname + "'");
             ret = null;
-        } 
+        }
         catch (SecurityException e) 
         {
             System.out.println("SecurityException on constructor for class '" + clzname + "'");
@@ -156,6 +169,47 @@ public class InstancerCode
         }
         
         return ret;
+    }
+
+    
+    private Object createList(String clzname, 
+                              Object argobj) 
+    {
+        // set 'addto' to contain the elements we want in the list
+        Object[] addto = null;
+        
+        if (argobj != null)
+        {
+            if (argobj.getClass().isArray())
+            {
+                addto = (Object[]) argobj;
+            }
+            else 
+            {
+                addto = new Object[1];
+                addto[0] = argobj;
+            }
+        }
+        
+        
+        Object container = createNew(clzname, null);
+        if (container instanceof java.util.List)
+        {
+            List<Object> list = (List<Object>) container;
+        
+            
+            for (Object a : addto)
+            {
+                System.out.println("ADDING TO LIST: " + a);
+                list.add(a);
+            }
+        }
+        else
+        {
+            System.out.println("NO IDEA HOW TO ADD to " +
+                               container.getClass().getName());
+        }
+        return container;
     }
 
 
@@ -231,30 +285,49 @@ public class InstancerCode
 
     private Object[] getParametersFromArgObj(Object argobj) 
     {
-        List<Object> ret = new ArrayList<Object>();
-        
-        if (argobj instanceof Array)
+        if (argobj == null)
         {
-            
+            return null;
         }
         else
         {
-            ret.add(argobj);
+            List<Object> ret = new ArrayList<Object>();
+        
+            if (argobj instanceof Array)
+            {
+                
+            }
+            else
+            {
+                ret.add(argobj);
+            }
+            return ret.toArray(new Object[0]);
         }
-
-            
-        return ret.toArray(new Object[0]);
     }
 
     private Class<?>[] getParameterTypesFromArgObj(Object[] parameters,
                                                    Object argobj) 
     {
-        List<Class<?>> ret = new ArrayList<Class<?>>();
-        for (Object p : parameters)
+        if (argobj == null)
         {
-            ret.add(p.getClass());
+            return null;
         }
-        return ret.toArray(new Class[0]);
+        else
+        {
+            List<Class<?>> ret = new ArrayList<Class<?>>();
+            for (Object p : parameters)
+            {
+                if (p != null)
+                {
+                    ret.add(p.getClass());
+                }
+                else
+                {
+                    ret.add(Void.TYPE);
+                }
+            }
+            return ret.toArray(new Class[0]);
+        }
     }
 
 }

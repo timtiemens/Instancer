@@ -1,4 +1,4 @@
-// $ANTLR 3.4 Instancer.g 2011-10-26 16:42:12
+// $ANTLR 3.4 Instancer.g 2011-10-26 18:20:38
   
    package tiemens.util.instancer.antlr;
    
@@ -306,7 +306,7 @@ public class InstancerParser extends Parser {
 
 
     // $ANTLR start "topInner"
-    // Instancer.g:122:1: topInner returns [Object value] : ( '(' cmd= command clz= classname (args= topInner )? ')' |c= QUOTEDLITERAL );
+    // Instancer.g:122:1: topInner returns [Object value] : ( '(' cmd= command clz= classname (args= topInner )* ')' |c= QUOTEDLITERAL );
     public final Object topInner() throws RecognitionException {
         Object value = null;
 
@@ -320,7 +320,7 @@ public class InstancerParser extends Parser {
 
 
         try {
-            // Instancer.g:123:5: ( '(' cmd= command clz= classname (args= topInner )? ')' |c= QUOTEDLITERAL )
+            // Instancer.g:123:5: ( '(' cmd= command clz= classname (args= topInner )* ')' |c= QUOTEDLITERAL )
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -339,7 +339,7 @@ public class InstancerParser extends Parser {
             }
             switch (alt5) {
                 case 1 :
-                    // Instancer.g:123:7: '(' cmd= command clz= classname (args= topInner )? ')'
+                    // Instancer.g:123:7: '(' cmd= command clz= classname (args= topInner )* ')'
                     {
                     match(input,11,FOLLOW_11_in_topInner178); 
 
@@ -355,27 +355,34 @@ public class InstancerParser extends Parser {
                     state._fsp--;
 
 
-                    // Instancer.g:123:41: (args= topInner )?
-                    int alt4=2;
-                    int LA4_0 = input.LA(1);
+                    // Instancer.g:123:41: (args= topInner )*
+                    loop4:
+                    do {
+                        int alt4=2;
+                        int LA4_0 = input.LA(1);
 
-                    if ( (LA4_0==QUOTEDLITERAL||LA4_0==11) ) {
-                        alt4=1;
-                    }
-                    switch (alt4) {
-                        case 1 :
-                            // Instancer.g:123:41: args= topInner
-                            {
-                            pushFollow(FOLLOW_topInner_in_topInner190);
-                            args=topInner();
-
-                            state._fsp--;
+                        if ( (LA4_0==QUOTEDLITERAL||LA4_0==11) ) {
+                            alt4=1;
+                        }
 
 
-                            }
-                            break;
+                        switch (alt4) {
+                    	case 1 :
+                    	    // Instancer.g:123:41: args= topInner
+                    	    {
+                    	    pushFollow(FOLLOW_topInner_in_topInner190);
+                    	    args=topInner();
 
-                    }
+                    	    state._fsp--;
+
+
+                    	    }
+                    	    break;
+
+                    	default :
+                    	    break loop4;
+                        }
+                    } while (true);
 
 
                     match(input,12,FOLLOW_12_in_topInner193); 
@@ -521,7 +528,7 @@ public class InstancerParser extends Parser {
     public static final BitSet FOLLOW_11_in_topInner178 = new BitSet(new long[]{0x0000000000000080L});
     public static final BitSet FOLLOW_command_in_topInner182 = new BitSet(new long[]{0x0000000000000090L});
     public static final BitSet FOLLOW_classname_in_topInner186 = new BitSet(new long[]{0x0000000000001A00L});
-    public static final BitSet FOLLOW_topInner_in_topInner190 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_topInner_in_topInner190 = new BitSet(new long[]{0x0000000000001A00L});
     public static final BitSet FOLLOW_12_in_topInner193 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_QUOTEDLITERAL_in_topInner205 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_IDENTIFIER_in_command268 = new BitSet(new long[]{0x0000000000000002L});
