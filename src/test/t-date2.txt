@@ -1,0 +1,4 @@
+{ import java.util.Date; import java.io.IOException; 
+  logging "veryHigh"; }
+(new java.util.Date (new java.lang.Long "132456789012"))
+

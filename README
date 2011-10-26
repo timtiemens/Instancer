@@ -14,5 +14,7 @@ Capable of creating objects that have constructors that take:
   * String arguments
   * List arguments
   * Array arguments
-  * Object arguments that can be created by using these rules
-
+  * Primitive type arguments (int, double, etc.)
+  * Any object arguments that can be created by using these rules
+      (this includes Integer, Double, etc. because they have
+       String constructors)

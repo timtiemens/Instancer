@@ -1,0 +1,149 @@
+<project name="zz_test"
+	     default="dist"
+         basedir=".">
+
+
+    <property name="src.dir"        value="${basedir}/src" />
+    <property name="src.java"       value="${src.dir}/java" />
+
+    <property name="build.dir"      value="${basedir}/build" />
+    <property name="build.classes"  value="${build.dir}/build" />
+    <property name="build.tests"    value="${build.dir}/tests" />
+    <property name="build.packages" value="${build.dir}/packages" />
+    <property name="build.dist"     value="${build.dir}/dist" />
+
+    <!-- ===================================================================
+            Main target: bundle this project up
+         =================================================================== -->
+    <target name="dist">
+       <mkdir name="${build.dist}" />
+       <jar destfile="${build.dist}/Instancer.project.jar">
+         <zipfileset dir="."
+               includes=".classpath .project .settings/** src/** build.xml"/>
+       </jar>
+    </target>
+
+    <!-- ===================================================================
+            Target: create .jar
+         =================================================================== -->
+    <target name="package">
+       <mkdir name="${build.packages}" />
+       <jar destfile="${build.packages}/instancer-${version}.jar">
+         <zipfileset dir="${build.classes}"
+               includes="**"/>
+       </jar>
+    </target>
+
+    <!-- ===================================================================
+            Deletes any built files
+         =================================================================== -->
+    <target name="clean">
+      <delete dir="${build.dir}"/>
+    </target>
+
+    <!-- ===================================================================
+            Compile everything
+         =================================================================== -->
+    <path id="compile.classpath">
+       <pathelement location="lib/antlr-3.4-complete-no-antlrv2.jar" />
+       <pathelement location="lib/commons-lang3-3.0.1.jar" />
+       <pathelement location="lib/junit-3.8.2.jar" />
+    </path>
+
+    <path id="run.classpath">
+       <path refid="compile.classpath" />
+       <pathelement path="${build.classes}"/>
+    </path>
+
+    <target name="compile">
+       <mkdir dir="${build.classes}" />
+       <javac srcdir="${src.java}"
+             destdir="${build.classes}">
+          <classpath refid="compile.classpath" />
+       </javac>
+    </target>
+
+    <!-- ===================================================================
+            Compile the grammar using antlr
+         =================================================================== -->
+    <macrodef name="antlr-compile">
+       <attribute name="grammar.dir"/>
+       <attribute name="grammar.filename"/>
+       <sequential>
+           <java classname="org.antlr.Tool"
+                 dir="@{grammar.dir}"
+                 fork="true"
+                 failonerror="true"
+           >
+             <classpath refid="compile.classpath" />
+             <arg value="@{grammar.filename}" />
+           </java>
+        </sequential>
+    </macrodef>
+    <target name="generate-Instancer">
+      <antlr-compile  grammar.dir="src/java/tiemens/util/instancer/antlr"
+                      grammar.filename="Instancer.g" />
+    </target>
+    <target name="generate-SimpleCalc">
+      <antlr-compile  grammar.dir="src/java/tiemens/util/instancer/antlrlearn"
+                      grammar.filename="SimpleCalc.g" />
+    </target>
+    <target name="generate-Expr">
+      <antlr-compile  grammar.dir="src/java/tiemens/util/instancer/antlrlearn"
+                      grammar.filename="Expr.g" />
+    </target>
+    <target name="generate-Resource">
+      <antlr-compile  grammar.dir="src/java/tiemens/util/instancer/antlrlearn"
+                      grammar.filename="Resource.g" />
+    </target>
+    <target name="generate-all" 
+         depends="generate-Instancer, generate-SimpleCalc, generate-Expr,
+                  generate-Resource" />
+          
+    <target name="generate-Instancer-hide">
+      <java classname="org.antlr.Tool"
+            dir="src/java/tiemens/util/instancer/antlr"
+            fork="true"
+            failonerror="true"
+      >
+        <classpath refid="compile.classpath" />
+        <arg value="Instancer.g" />
+      </java>
+    </target>
+
+    <!-- ===================================================================
+            Run the test program
+         =================================================================== -->
+    <target name="run-Instancer">
+      <java classname="tiemens.util.instancer.antlr.InstancerParser"
+            dir="."
+            fork="true">
+         <classpath refid="run.classpath" />
+         <arg value="src/test/Instancer.input.txt"/>
+      </java>
+    </target>
+
+    <!-- ===================================================================
+            Run the Junit tests
+         =================================================================== -->
+    <target name="test">
+      <delete dir="${build.testss}" />
+      <mkdir  dir="${build.tests}" />
+      <junit printsummary="yes"
+             haltonfailure="yes"
+             >
+         <classpath refid="run.classpath" />
+         <formatter type="plain"/>
+         <test name="tiemens.util.instancer.antlr.InstancerUT"
+               todir="${build.tests}"
+          />
+      </junit> 
+    </target>
+
+    <!-- ===================================================================
+            All - generate .java, compile .java, run test program
+         =================================================================== -->
+    <target name="all" depends="generate-Instancer, compile, test">
+    </target>
+
+</project>
