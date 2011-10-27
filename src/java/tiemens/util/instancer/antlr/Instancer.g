@@ -36,7 +36,38 @@ grammar Instancer;
     {
         instancerCode = in;
     }
+    
+    
+    List<RecognitionException> exceptions = new ArrayList<RecognitionException>();
+    public List<RecognitionException> getExceptions() 
+    {
+        return exceptions;
+    }
+    public void addException(RecognitionException e)
+    {
+        exceptions.add(e);
+    }
+    @Override
+    public void reportError(RecognitionException e) 
+    {
+ //       super.reportError(e);
+        addException(e);
+    }
 }
+
+/*
+ *  if you use 'rulecatch', then you get hideous Exceptions like:
+ *       MismatchedTokenException(11!=14) at org.antlr.runtime...
+ *  It is ok, just watch how you print the message and/or the stack trace.
+ */
+@parser::rulecatch
+{
+    catch (RecognitionException e) 
+    {
+        throw e;
+    }
+}
+
 
 @parser::header 
 {  
@@ -54,8 +85,25 @@ grammar Instancer;
 
 @parser::members 
 {
+
     private final InstancerCode instancerCode = new InstancerCode();
-    
+    private InstancerLexer theLexer;
+    private void rememberLexer(InstancerLexer in)
+    { 
+        theLexer = in;
+    }
+    public List<RecognitionException> getLexerExceptions() 
+    {
+        return theLexer.getExceptions();
+    }
+    /*
+        if you do this   ... it works, but is not necessary
+    @Override
+    public void reportError(RecognitionException re)
+    {
+        theLexer.addException(re);
+    }
+    */
     public static InstancerParser create(String[] args) throws Exception 
     {
         ANTLRReaderStream input = getReaderStream(args);
@@ -68,18 +116,38 @@ grammar Instancer;
         InstancerParser parser = new InstancerParser(tokens);
         
         lexer.setInstancerCode(parser.instancerCode);
+        parser.rememberLexer(lexer);
         
         return parser;
     }
-    
+    private List<Object> result = null;
+    public List<Object> getResultOrThrow() throws Exception
+    {
+        if (result == null)
+        {
+            result = this.top();
+        }
+        if (getLexerExceptions().size() != 0)
+        {
+            throw getLexerExceptions().get(0);
+        }
+        else if (getNumberOfSyntaxErrors() != 0)
+        {
+            throw new IllegalStateException("Number of syntax errors: " + 
+                                            getNumberOfSyntaxErrors());
+        }
+        else
+        {
+            return result;
+        }
+    }
     public static void main(String[] args) throws Exception 
-
     {
         InstancerParser parser = create(args);
 
         try 
         {
-            List<Object> thelist = parser.top();
+            List<Object> thelist = parser.getResultOrThrow();
             
             System.out.println("MAIN: toplist.size() = " + thelist.size());
             Object zero = thelist.get(0);
@@ -88,7 +156,9 @@ grammar Instancer;
         } 
         catch (RecognitionException e)  
         {
-            e.printStackTrace();
+            System.out.println("MAIN: failed to parse");
+            System.out.println("MAIN: stack trace follows");
+            e.printStackTrace(System.out);
         }
     }
     
@@ -115,6 +185,16 @@ grammar Instancer;
         }
         return input;
     }
+    /*
+        if you do this, it still prints
+            line 1:0 null
+     *
+    @Override
+    public String getErrorMessage(RecognitionException e, String[] tokenNames) 
+    {
+        return null; 
+    }
+    */
 }
 
 /*------------------------------------------------------------------
@@ -125,7 +205,10 @@ top returns [List<Object> toplist]
            @init { $toplist = new java.util.ArrayList<Object>(); }
     : initStatements? c=topInner { toplist.add($c.value); }
     ;
-    
+    /* if you do this .. 
+    catch [RecognitionException re] { reportError(re); }
+     */
+     
 initStatements
     : '{' (initStatementChoice ';')* '}'
     ;

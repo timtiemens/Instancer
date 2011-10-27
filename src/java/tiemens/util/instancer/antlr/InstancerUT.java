@@ -45,6 +45,7 @@ public class InstancerUT
     {
         runOn("<new java.lang.String(\"1234567899\")>");
     }
+    
     public void testList()
     {
         List<Object> ret = runOn("<list java.util.ArrayList(" +
@@ -55,7 +56,7 @@ public class InstancerUT
                                      ">");
         Assert.assertEquals("size mismatch", 1, ret.size());
         Assert.assertEquals("type wrong", "java.util.ArrayList", ret.get(0).getClass().getName());
-        java.util.ArrayList arraylist = (java.util.ArrayList) ret.get(0);
+        java.util.ArrayList<?> arraylist = (java.util.ArrayList<?>) ret.get(0);
         Assert.assertEquals("inner size mismatch", 2, arraylist.size());
         Assert.assertEquals("[0] class wrong", "java.lang.Long", arraylist.get(0).getClass().getName());
         Assert.assertEquals("[1] class wrong", "java.util.Date", arraylist.get(1).getClass().getName());        
@@ -89,12 +90,36 @@ public class InstancerUT
    
     public void testSomeFails()
     {
-        //runOnFails("(new fails 1 2 3)");
+        runOnFails("(new fails 1 2 3)");
     }
     
     private void runOnFails(String s)
     {
-        runOn(s);
+        InstancerParser test;
+
+        try 
+        {
+            test = InstancerParser.create(new String[] { s });
+
+            /* List<Object> thelist = */ test.getResultOrThrow();
+
+            if (test.getNumberOfSyntaxErrors() == 0)
+            {
+                Assert.fail("The test should have failed on '" + s + "'");
+            }
+            else
+            {
+                
+            }
+        } 
+        catch (RecognitionException e)  
+        {
+            // ok
+        }
+        catch (Exception e)
+        {
+            // ok
+        }
     }
     
     private List<Object> runOn(String s)

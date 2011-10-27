@@ -1,7 +1,5 @@
 package tiemens.util.instancer.antlrlearn;
 
-import java.io.StringBufferInputStream;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 

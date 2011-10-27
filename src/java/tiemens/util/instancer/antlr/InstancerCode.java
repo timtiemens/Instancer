@@ -383,6 +383,7 @@ public class InstancerCode
         }
     }
     
+    @SuppressWarnings("unused")
     private Constructor<?> getConstructorByFind(Class<?> dclz,
                                                 Class<?>[] parameterTypes)
         throws NoSuchMethodException
