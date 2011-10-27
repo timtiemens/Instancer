@@ -1,4 +1,4 @@
 { import java.util.Date; import java.io.IOException; 
   logging "veryHigh"; }
-(new	Date (new java.lang.Long "132456789012"))
+<new  Date( <new java.lang.Long("132456789012")> ) >
 

@@ -25,6 +25,19 @@
 grammar Instancer;
 
 
+@lexer::header 
+{
+   package tiemens.util.instancer.antlr; 
+}
+@lexer::members
+{
+    private InstancerCode instancerCode = null;
+    public void setInstancerCode(InstancerCode in)
+    {
+        instancerCode = in;
+    }
+}
+
 @parser::header 
 {  
    package tiemens.util.instancer.antlr;
@@ -36,22 +49,26 @@ grammar Instancer;
    import java.io.StringReader;
    import java.io.FileReader; 
 }
-@lexer::header 
-{
-   package tiemens.util.instancer.antlr; 
-}
+
 
 
 @parser::members 
 {
-    private InstancerCode instancerCode = new InstancerCode();
+    private final InstancerCode instancerCode = new InstancerCode();
     
     public static InstancerParser create(String[] args) throws Exception 
     {
         ANTLRReaderStream input = getReaderStream(args);
+        return create(input);
+    }
+    public static InstancerParser create(ANTLRReaderStream input) throws Exception
+    {
         InstancerLexer lexer = new InstancerLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         InstancerParser parser = new InstancerParser(tokens);
+        
+        lexer.setInstancerCode(parser.instancerCode);
+        
         return parser;
     }
     
@@ -115,13 +132,12 @@ initStatements
 
 initStatementChoice
     : 'import'  clz=classname    { instancerCode.addImport($clz.value); }
-    | 'logging' c=QUOTEDLITERAL  { instancerCode.configureLogging( 
-                                        instancerCode.unescape($c.getText())); } /* see NOTE-4 */
+    | 'logging' c=QUOTEDLITERAL  { instancerCode.configureLogging(c.getText()); } /* see NOTE-4 */
     ;  
    
 topInner returns [Object value]
-    : '(' cmd=command clz=classname args=topInner* ')' { $value = instancerCode.create($cmd.value, $clz.value, $args.value); }
-    | c=QUOTEDLITERAL                                  { $value = instancerCode.unescape(c.getText()); }
+    : '<' cmd=command clz=classname args=arglist '>'   { $value = instancerCode.create($cmd.value, $clz.value, $args.list); }
+    /* | c=QUOTEDLITERAL                                  { $value = c.getText(); } */
     ;
     
 command returns [String value] 
@@ -133,7 +149,16 @@ classname returns [String value]
     |  c=IDENTIFIER { $value = $c.getText(); }   /* see NOTE-3 */
     ;
 
-       
+arglist returns [List<Object> list]
+    @init {  $list = new ArrayList<Object>();   }
+    :  '('
+        (   ( c=QUOTEDLITERAL {$list.add(c.getText());  }  )
+          | ( a=topInner      {$list.add($a.value);     }  )
+        )*
+        ')'  
+    ;
+  
+     
 
 /*------------------------------------------------------------------
  * LEXER RULES  [see Note-1]
@@ -155,7 +180,9 @@ QUOTEDLITERAL
         (   EscapeSequence
         |   ~( '\\' | '"' | '\r' | '\n' )        
         )* 
-        '"'    { setText( getText().substring(1, getText().length() - 1)); }
+        '"'    { setText( getText().substring(1, getText().length() - 1) );
+                 setText( instancerCode.unescape(getText()) );
+               }
     ;
 
 
@@ -220,4 +247,5 @@ fragment DIGIT  : '0'..'9' ;
          character '\'.
      That way, embedded quotations (") can be escaped as \", yet still
          make it to the program as just ".
+     MODIFIED!! - now QUOTEDLITERAL does its own unescaping
   */         

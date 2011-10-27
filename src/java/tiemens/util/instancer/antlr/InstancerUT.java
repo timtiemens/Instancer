@@ -29,29 +29,42 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+
+import junit.framework.Assert;
+import junit.framework.TestCase;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.RecognitionException;
-
-import junit.framework.Assert;
-import junit.framework.TestCase;
 
 public class InstancerUT
         extends TestCase
 {
     public void testDoubleQuotes()
     {
-        runOn("(new java.lang.String \"123456789\")");
+        runOn("<new java.lang.String(\"1234567899\")>");
+    }
+    public void testList()
+    {
+        List<Object> ret = runOn("<list java.util.ArrayList(" +
+                                    "<new java.lang.Long(\"132456789012\")>" +
+                                    "<new java.util.Date " +
+                                        "(<new java.lang.Long(\"132456789012\")> )>" +
+                                     ")" +
+                                     ">");
+        Assert.assertEquals("size mismatch", 1, ret.size());
+        Assert.assertEquals("type wrong", "java.util.ArrayList", ret.get(0).getClass().getName());
+        java.util.ArrayList arraylist = (java.util.ArrayList) ret.get(0);
+        Assert.assertEquals("inner size mismatch", 2, arraylist.size());
+        Assert.assertEquals("[0] class wrong", "java.lang.Long", arraylist.get(0).getClass().getName());
+        Assert.assertEquals("[1] class wrong", "java.util.Date", arraylist.get(1).getClass().getName());        
     }
     public void testAllInputFiles()
     {
         for (File f :  getInputFiles())
         {
-            System.out.println("f is " + f);
+            System.out.println("========== f is " + f);
             runOn(new String[] { f.toString() });
         }
     }
@@ -84,12 +97,12 @@ public class InstancerUT
         runOn(s);
     }
     
-    private void runOn(String s)
+    private List<Object> runOn(String s)
     {
-        runOn(new String[] { s });
+        return runOn(new String[] { s });
     }
     
-    private void runOn(String[] input)
+    private List<Object> runOn(String[] input)
     {
         InstancerParser test;
 
@@ -102,6 +115,8 @@ public class InstancerUT
             Object zero = thelist.get(0);
             Assert.assertNotNull(zero);
             System.out.println("Test result=" + zero);
+            
+            return thelist;
         } 
         catch (RecognitionException e)  
         {
@@ -112,7 +127,7 @@ public class InstancerUT
         {
             Assert.fail("Did not parse, e=" + e);
         }
-
+        return null;
     }
     
     

@@ -22,13 +22,14 @@
  */
 package tiemens.util.instancer.antlr;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -37,7 +38,8 @@ public class InstancerCode
     // ==================================================
     // class static data
     // ==================================================
-
+    private Logger logger = Logger.getLogger(InstancerCode.class.getName());
+    
     // ==================================================
     // class static methods
     // ==================================================
@@ -64,17 +66,18 @@ public class InstancerCode
 
     public void addImport(final String fullyQualifiedName)
     {
-        System.out.println("I see import of '" + fullyQualifiedName + "'");
+        logger.fine("I see import of '" + fullyQualifiedName + "'");
         String[] pieces = fullyQualifiedName.split("\\.");
-        System.out.println("#pieces = " + pieces.length);
+        logger.fine("#pieces = " + pieces.length);
         final String key = pieces[pieces.length - 1];
-        System.out.println("Import '" + key + "' to '" + fullyQualifiedName + "'");
+        logger.fine("Import '" + key + "' to '" + fullyQualifiedName + "'");
         importMap.put(key, fullyQualifiedName);
     }
     
     public void configureLogging(final String loggingConfigureString)
     {
-        System.out.println("I see logging of '" + loggingConfigureString + "'");   
+        logger.info("I see logging of '" + loggingConfigureString + "'" +
+                    " this is not yet implemented.");
     }
     
     public String unescape(final String input)
@@ -86,32 +89,42 @@ public class InstancerCode
 
     public Object create(final String command,
                          final String clzname,
-                         final Object argobj)
+                         final List<Object> arglist)
     {
         Object ret;
         ret = new String("**ERROR** InstancerCode[cmd='" + command + 
                          "' clzname='" + clzname + 
-                         "' arg='" + argobj + "']");
+                         "' arg='" + arglist + "']");
 
-        System.out.println("clzname='" + clzname + "'");
-        System.out.print("argobj.class=");
-        if (argobj != null)
+        logger.fine("clzname='" + clzname + "'");
+        logger.fine("arglist.class=");
+        if (arglist != null)
         {
-            System.out.println(argobj.getClass().getName());
+            // Note: this should always pring "java.util.ArrayList"
+            logger.fine(arglist.getClass().getName());
         }
         else
         {
-            System.out.println("null");
+            logger.fine("null");
+            logger.severe("somehow got null for arglist");
         }
-        System.out.println("argobj=" + argobj);
+        logger.fine("arglist=" + arglist);
+        if (arglist.size() > 0)
+        {
+            for (int i = 0, n = arglist.size(); i < n; i++)
+            {
+                logger.fine("arglist[" + i + "].class=" + arglist.get(i).getClass().getName());
+                logger.fine("arglist[" + i + "]='" + arglist.get(i).toString() + "'");
+            }
+        }
 
         if ("new".equals(command))
         {
-            ret =  createNew(clzname, argobj);
+            ret =  createNew(clzname, arglist);
         }
         else if ("list".equals(command))
         {
-            ret = createList(clzname, argobj);
+            ret = createList(clzname, arglist);
         }
         
         return ret;
@@ -123,14 +136,14 @@ public class InstancerCode
     // ==================================================
 
     private Object createNew(String clzname, 
-                             Object argobj) 
+                             List<Object> arglist) 
     {
         Object ret = null;
         try 
         {
             Class<?> c                = getClassForName(clzname);
-            Object[] parameters       = getParametersFromArgObj(argobj);
-            Class<?>[] parameterTypes = getParameterTypesFromArgObj(parameters, argobj);
+            Object[] parameters       = getParametersFromArgObj(arglist);
+            Class<?>[] parameterTypes = getParameterTypesFromArgObj(parameters, arglist);
             
             
             Constructor<?> cons = getConstructor(c, parameterTypes);
@@ -138,31 +151,33 @@ public class InstancerCode
         } 
         catch (ClassNotFoundException e) 
         {
-            System.out.println("Could not find class '" + clzname + "'");
+            logger.severe("Could not find class '" + clzname + "'");
             ret = null;
         }
         catch (SecurityException e) 
         {
-            System.out.println("SecurityException on constructor for class '" + clzname + "'");
+            logger.severe("SecurityException on constructor for class '" + clzname + "'");
             ret = null;
         } 
         catch (NoSuchMethodException e) 
         {
-            System.out.println("Could not find constructor for class '" + clzname + "'");
+            logger.severe("Could not find constructor for class '" + clzname + "'");
             ret = null;
         } catch (IllegalArgumentException e) 
         {
-            System.out.println("Coulnd not invoke newInstance, IllegalArgument: " + e);
+            logger.severe("Coulnd not invoke newInstance, IllegalArgument: " + e);
             ret = null;
         } catch (InstantiationException e) 
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (IllegalAccessException e) 
+        }
+        catch (IllegalAccessException e) 
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } catch (InvocationTargetException e) 
+        } 
+        catch (InvocationTargetException e) 
         {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -173,45 +188,48 @@ public class InstancerCode
 
     
     private Object createList(String clzname, 
-                              Object argobj) 
+                              List<Object> argobj) 
     {
         // set 'addto' to contain the elements we want in the list
         Object[] addto = null;
         
         if (argobj != null)
         {
-            if (argobj.getClass().isArray())
-            {
-                addto = (Object[]) argobj;
-            }
-            else 
-            {
-                addto = new Object[1];
-                addto[0] = argobj;
-            }
+//            if (argobj.getClass().isArray())
+//            {
+//                addto = (Object[]) argobj;
+//            }
+//            else 
+//            {
+                addto = argobj.toArray(new Object[0]);
+//            }
         }
         
         
         Object container = createNew(clzname, null);
         if (container instanceof java.util.List)
         {
-            List<Object> list = (List<Object>) container;
-        
+            List<Object> list = unsafe(container);
             
             for (Object a : addto)
             {
-                System.out.println("ADDING TO LIST: " + a);
+                logger.fine("ADDING TO LIST: " + a);
                 list.add(a);
             }
         }
         else
         {
-            System.out.println("NO IDEA HOW TO ADD to " +
+            logger.fine("NO IDEA HOW TO ADD to " +
                                container.getClass().getName());
         }
         return container;
     }
 
+    @SuppressWarnings("unchecked")
+    private List<Object> unsafe(final Object tolist)
+    {
+        return (List<Object>) tolist;
+    }
 
     private Class<?> getClassForName(String clzname) 
         throws ClassNotFoundException
@@ -227,14 +245,146 @@ public class InstancerCode
         }
         catch (ClassNotFoundException e)
         {
-            System.out.println("Failed to find class '" + usename + "' [from '" +
-                               clzname + "']");
+            logger.severe("Failed to find class '" + usename + "' [from '" +
+                          clzname + "']");
             throw e;
         }
     }
 
     private Constructor<?> getConstructor(Class<?> dclz,
-                                          Class<?>[] parameterTypes)
+            Class<?>[] parameterTypes)
+                    throws NoSuchMethodException
+    {
+        // old, original: return getConstructorByFind(dclz, parameterTypes);
+
+        return getConstructorBySelecting(dclz, parameterTypes);
+    }
+    
+    /**
+     * Loop through the constructors, find the best possible. 
+     */
+    private Constructor<?> getConstructorBySelecting(Class<?> dclz,
+                                                     Class<?>[] parameterTypes)
+        throws NoSuchMethodException
+    {
+        Constructor<?> ret = null;
+        for (Constructor<?> candidate : dclz.getConstructors())
+        {
+            Class<?>[] types = candidate.getParameterTypes();
+            boolean success = false;
+            logger.fine(".Checking constructor for " +
+                    dclz.getName() +
+                    " [types=" + types + "]" +
+                    " : " + 
+                    Arrays.toString(types));
+            if ((types == null) || (types.length == 0))
+            {
+                logger.fine("--Special case void");
+                if ((parameterTypes == null) || (parameterTypes.length == 0))
+                {
+                    success = true;
+                }
+            }
+            else if (parameterTypes == null)
+            {
+                success = false;
+            }
+            else  if (types.length == parameterTypes.length)
+            {
+                success = true;
+                
+                for (int i = 0, n = types.length; i < n; i++)
+                {
+                    if (! correctIsAssignableFrom(types[i], parameterTypes[i]))
+                    {
+                        success = false;
+                    }
+                }
+            }
+            if (success)
+            {
+                logger.fine("..success");
+                ret = candidate;
+                break;
+            }
+            else
+            {
+                logger.fine("..failed");
+            }
+        }
+        return ret;
+    }
+    
+    /**
+     * For constructors, need a better "isAssignableFrom".
+     * That method says 'false' for [[Long is not assignable to long]].
+     * We need it so say 'true'
+     * @param tothis
+     * @param fromthis
+     * @return
+     */
+    public static boolean correctIsAssignableFrom(Class<?> tothis,
+                                                  Class<?> fromthis)
+    {
+        if (tothis.isAssignableFrom(fromthis))
+        {
+            return true;
+        }
+        
+        if (tothis.isPrimitive()) 
+        {
+            Class<?> parameterWrapperClazz = getPrimitiveWrapper(tothis);
+            if (parameterWrapperClazz != null) 
+            {
+                return parameterWrapperClazz.equals(fromthis);
+            }
+        }
+
+        return false;
+    }
+   
+    public static Class<?> getPrimitiveWrapper(Class<?> primitiveType) 
+    {
+        if (boolean.class.equals(primitiveType)) 
+        {
+            return Boolean.class;
+        }
+        else if (byte.class.equals(primitiveType)) 
+        {
+            return Byte.class;
+        }
+        else if (char.class.equals(primitiveType)) 
+        {
+            return Character.class;
+        }
+        else if (double.class.equals(primitiveType)) 
+        {
+            return Double.class;
+        }
+        else if (float.class.equals(primitiveType)) 
+        {
+            return Float.class;
+        }
+        else if (int.class.equals(primitiveType)) 
+        {
+            return Integer.class;
+        }
+        else if (long.class.equals(primitiveType)) 
+        {
+            return Long.class;
+        }
+        else if (short.class.equals(primitiveType)) 
+        {
+            return Short.class;
+        }
+        else 
+        {
+            return null;
+        }
+    }
+    
+    private Constructor<?> getConstructorByFind(Class<?> dclz,
+                                                Class<?>[] parameterTypes)
         throws NoSuchMethodException
     {
         Constructor<?> ret = null;
@@ -283,9 +433,10 @@ public class InstancerCode
         return ret;
     }
 
-    private Object[] getParametersFromArgObj(Object argobj) 
+    private Object[] getParametersFromArgObj(List<Object> arglist) 
     {
-        if (argobj == null)
+        if ((arglist == null) || 
+            (arglist.size() == 0))
         {
             return null;
         }
@@ -293,22 +444,24 @@ public class InstancerCode
         {
             List<Object> ret = new ArrayList<Object>();
         
-            if (argobj instanceof Array)
-            {
-                
-            }
-            else
-            {
-                ret.add(argobj);
-            }
+            // BIG TODO
+//            if (argobj instanceof Array)
+//            {
+//                
+//            }
+//            else
+//            {
+                ret.addAll(arglist);
+//            }
             return ret.toArray(new Object[0]);
         }
     }
 
     private Class<?>[] getParameterTypesFromArgObj(Object[] parameters,
-                                                   Object argobj) 
-    {
-        if (argobj == null)
+                                                   List<Object> arglist) 
+    {   
+        if ((arglist == null) ||
+            (arglist.size() == 0))
         {
             return null;
         }
@@ -329,6 +482,4 @@ public class InstancerCode
             return ret.toArray(new Class[0]);
         }
     }
-
 }
-

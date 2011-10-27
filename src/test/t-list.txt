@@ -1,5 +1,6 @@
-(list java.util.ArrayList 
-   (new java.lang.Long "132456789012")
-   (new java.util.Date (new java.lang.Long "132456789012"))
-)
+<list java.util.ArrayList(
+   <new java.lang.Long("132456789012")>
+   <new java.util.Date (<new java.lang.Long("132456789012")> )>
+  )
+>
 
