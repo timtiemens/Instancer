@@ -22,6 +22,8 @@
  */
 package tiemens.util.instancer.antlr;
 
+import java.io.FileReader;
+import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -29,8 +31,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
+import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.ANTLRReaderStream;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class InstancerCode
@@ -76,10 +83,78 @@ public class InstancerCode
     
     public void configureLogging(final String loggingConfigureString)
     {
-        logger.info("I see logging of '" + loggingConfigureString + "'" +
-                    " this is not yet implemented.");
+        //logger.info("I see logging of '" + loggingConfigureString + "'" +
+        //            " this is not yet implemented.");
+        Level newLevel = null;
+        
+        try
+        {
+            newLevel = Level.parse(loggingConfigureString.toUpperCase());
+        }
+        catch (IllegalArgumentException e)
+        {
+            newLevel = null;
+        }
+        
+        if (newLevel != null)
+        {
+            updateHandlers(newLevel, logger, loggingConfigureString);
+            
+            logger.setLevel(newLevel);
+            logger.info("Set logging level to " + loggingConfigureString);
+        }
+        else
+        {
+            String msg = "Logging level '" + loggingConfigureString + "' not understood.";
+            System.out.println(msg);
+            logger.severe(msg);
+        }
+
     }
     
+    private void updateHandlers(Level newLevel,
+                                Logger uselogger,
+                                String loggingConfigureString) 
+    {
+        List<Handler> handlers = new ArrayList<Handler>();
+        Logger walk = uselogger;
+        while (walk != null)
+        {
+            for (Handler add : walk.getHandlers())
+            {
+                handlers.add(add);
+            }
+            walk = walk.getParent();
+        }
+        
+        for (Handler handler  : handlers)
+        {
+            metaLoggerInfo("Handler level = " + handler.getLevel().intValue() +
+                           "newLevel = " + newLevel.intValue());
+            
+            if (handler.getLevel().intValue() > newLevel.intValue())
+            {
+                if (! loggingConfigureString.equals(loggingConfigureString.toUpperCase()))
+                {
+                    String note = "Note: setting handler level to '" + 
+                                  loggingConfigureString + "'.";
+                    String explain = "Use '" + loggingConfigureString.toUpperCase() + 
+                                     "' to prevent this behavior.";
+                    String msg = "Instancer: " + note + "  " + explain;
+                    metaLoggerInfo(msg);
+                    logger.info(msg);
+                    handler.setLevel(newLevel);
+                }
+            }
+        }
+    }
+
+    /** changing logging levels and loggin stuff meta-problem...*/
+    private void metaLoggerInfo(String string) 
+    {
+        // System.out.println(string);
+    }
+
     public String unescape(final String input)
     {
         String ret = StringEscapeUtils.unescapeJava(input);
@@ -481,6 +556,45 @@ public class InstancerCode
                 }
             }
             return ret.toArray(new Class[0]);
+        }
+    }
+    
+    
+    public static class MainUtils
+    {
+        /**
+         * Do "smart things" based on String[] args.
+         * If there are no args       Then  return System.in
+         * If arg[0] contains " "     Then  return string-reader
+         *    Else                    Then  return FileReader(arg[0])
+         *    
+         * @param args
+         * @return
+         * @throws Exception
+         */
+        public static ANTLRReaderStream getReaderStream(String[] args) 
+            throws Exception
+        {
+            ANTLRReaderStream input = null;
+            if (args.length > 0)
+            {
+                String arg = args[0];
+                if (arg.indexOf(" ") >= 0)
+                {
+                   System.out.println("STRING is " + arg);
+                   StringReader stream = new StringReader(arg);
+                   input = new ANTLRReaderStream(stream);
+                }
+                else
+                {
+                   input = new ANTLRReaderStream(new FileReader(arg));
+                }
+            }
+            else
+            {
+                input = new ANTLRInputStream(System.in);
+            }
+            return input;
         }
     }
 }

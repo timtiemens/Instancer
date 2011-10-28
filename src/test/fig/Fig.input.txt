@@ -1,0 +1,15 @@
+tiemens.util.instancer.antlrfig.RunFigUT$Site jguru {
+  port = 80;
+  answers = "www.jguru.com";
+  aliases = ["jguru.com", "www.magelang.com"];
+  menus = ["FAQ", "Forum", "Search"];
+}
+
+tiemens.util.instancer.antlrfig.RunFigUT$Site bea {
+  answers = "bea.jguru.com";
+  menus = ["FAQ", "Forum"];
+}
+
+tiemens.util.instancer.antlrfig.RunFigUT$Server {
+  sites = [$jguru, $bea];
+}

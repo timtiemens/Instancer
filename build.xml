@@ -1,4 +1,4 @@
-<project name="zz_test"
+<project name="Instancer"
 	     default="dist"
          basedir=".">
 
@@ -7,7 +7,7 @@
     <property name="src.java"       value="${src.dir}/java" />
 
     <property name="build.dir"      value="${basedir}/build" />
-    <property name="build.classes"  value="${build.dir}/build" />
+    <property name="build.classes"  value="${build.dir}/classes" />
     <property name="build.tests"    value="${build.dir}/tests" />
     <property name="build.packages" value="${build.dir}/packages" />
     <property name="build.dist"     value="${build.dir}/dist" />
@@ -98,9 +98,13 @@
       <antlr-compile  grammar.dir="src/java/tiemens/util/instancer/antlrlearn"
                       grammar.filename="Resource.g" />
     </target>
+    <target name="generate-fig">
+      <antlr-compile  grammar.dir="src/java/tiemens/util/instancer/antlrfig"
+                      grammar.filename="Fig.g" />
+    </target>
     <target name="generate-all" 
          depends="generate-Instancer, generate-SimpleCalc, generate-Expr,
-                  generate-Resource" />
+                  generate-Resource, generate-fig" />
           
     <target name="generate-Instancer-hide">
       <java classname="org.antlr.Tool"
@@ -122,6 +126,15 @@
             fork="true">
          <classpath refid="run.classpath" />
          <arg value="src/test/Instancer.input.txt"/>
+      </java>
+    </target>
+
+    <target name="run-fig">
+      <java classname="tiemens.util.instancer.antlrfig.RunFig"
+            dir="."
+            fork="true">
+         <classpath refid="run.classpath" />
+         <arg value="src/test/fig/Fig.input.txt"/>
       </java>
     </target>
 

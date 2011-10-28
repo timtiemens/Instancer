@@ -135,7 +135,7 @@ public class InstancerUT
         {
             test = InstancerParser.create(input);
             
-            List<Object> thelist = test.top();
+            List<Object> thelist = test.getResultOrThrow(); // top();
 
             Object zero = thelist.get(0);
             Assert.assertNotNull(zero);

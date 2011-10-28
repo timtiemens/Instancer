@@ -1,0 +1,8 @@
+{ 
+  /* when you use ALL UPPERCASE, the default Handler output filter
+     is left in place, and you [probably] don't actually get much output */
+  logging "FINEST"; 
+  import java.util.Date; import java.io.IOException; 
+}
+<new  Date( <new java.lang.Long("132456789012")> ) >
+

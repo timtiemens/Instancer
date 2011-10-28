@@ -1,0 +1,5 @@
+<new java.util.Date( /* this is a comment */
+  <new java.lang.Long("123456789012")>
+  )
+>
+

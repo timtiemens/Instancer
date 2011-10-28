@@ -1,4 +1,4 @@
-// $ANTLR 3.4 Instancer.g 2011-10-27 17:06:39
+// $ANTLR 3.4 Instancer.g 2011-10-28 17:46:11
 
    package tiemens.util.instancer.antlr; 
 
@@ -21,10 +21,10 @@ public class InstancerLexer extends Lexer {
     public static final int T__18=18;
     public static final int T__19=19;
     public static final int CLASSNAME=4;
-    public static final int DIGIT=5;
-    public static final int EscapeSequence=6;
-    public static final int IDENTIFIER=7;
-    public static final int NUMBER=8;
+    public static final int COMMENT=5;
+    public static final int DIGIT=6;
+    public static final int ESCAPESEQUENCE=7;
+    public static final int IDENTIFIER=8;
     public static final int QUOTEDLITERAL=9;
     public static final int WHITESPACE=10;
 
@@ -47,7 +47,7 @@ public class InstancerLexer extends Lexer {
         @Override
         public void reportError(RecognitionException e) 
         {
-     //       super.reportError(e);
+            super.reportError(e);
             addException(e);
         }
 
@@ -265,8 +265,8 @@ public class InstancerLexer extends Lexer {
         try {
             int _type = IDENTIFIER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:251:4: ( ( 'A' .. 'Z' | 'a' .. 'z' ) ( 'A' .. 'Z' | 'a' .. 'z' | DIGIT )* )
-            // Instancer.g:251:6: ( 'A' .. 'Z' | 'a' .. 'z' ) ( 'A' .. 'Z' | 'a' .. 'z' | DIGIT )*
+            // Instancer.g:231:4: ( ( 'A' .. 'Z' | 'a' .. 'z' ) ( 'A' .. 'Z' | 'a' .. 'z' | DIGIT )* )
+            // Instancer.g:231:6: ( 'A' .. 'Z' | 'a' .. 'z' ) ( 'A' .. 'Z' | 'a' .. 'z' | DIGIT )*
             {
             if ( (input.LA(1) >= 'A' && input.LA(1) <= 'Z')||(input.LA(1) >= 'a' && input.LA(1) <= 'z') ) {
                 input.consume();
@@ -278,7 +278,7 @@ public class InstancerLexer extends Lexer {
             }
 
 
-            // Instancer.g:251:32: ( 'A' .. 'Z' | 'a' .. 'z' | DIGIT )*
+            // Instancer.g:231:32: ( 'A' .. 'Z' | 'a' .. 'z' | DIGIT )*
             loop1:
             do {
                 int alt1=2;
@@ -328,13 +328,13 @@ public class InstancerLexer extends Lexer {
         try {
             int _type = CLASSNAME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:255:4: ( IDENTIFIER ( '.' IDENTIFIER )* )
-            // Instancer.g:255:6: IDENTIFIER ( '.' IDENTIFIER )*
+            // Instancer.g:235:4: ( IDENTIFIER ( '.' IDENTIFIER )* )
+            // Instancer.g:235:6: IDENTIFIER ( '.' IDENTIFIER )*
             {
             mIDENTIFIER(); 
 
 
-            // Instancer.g:255:17: ( '.' IDENTIFIER )*
+            // Instancer.g:235:17: ( '.' IDENTIFIER )*
             loop2:
             do {
                 int alt2=2;
@@ -347,7 +347,7 @@ public class InstancerLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // Instancer.g:255:19: '.' IDENTIFIER
+            	    // Instancer.g:235:19: '.' IDENTIFIER
             	    {
             	    match('.'); 
 
@@ -374,99 +374,41 @@ public class InstancerLexer extends Lexer {
     }
     // $ANTLR end "CLASSNAME"
 
-    // $ANTLR start "NUMBER"
-    public final void mNUMBER() throws RecognitionException {
-        try {
-            int _type = NUMBER;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:258:9: ( ( DIGIT )+ )
-            // Instancer.g:258:11: ( DIGIT )+
-            {
-            // Instancer.g:258:11: ( DIGIT )+
-            int cnt3=0;
-            loop3:
-            do {
-                int alt3=2;
-                int LA3_0 = input.LA(1);
-
-                if ( ((LA3_0 >= '0' && LA3_0 <= '9')) ) {
-                    alt3=1;
-                }
-
-
-                switch (alt3) {
-            	case 1 :
-            	    // Instancer.g:
-            	    {
-            	    if ( (input.LA(1) >= '0' && input.LA(1) <= '9') ) {
-            	        input.consume();
-            	    }
-            	    else {
-            	        MismatchedSetException mse = new MismatchedSetException(null,input);
-            	        recover(mse);
-            	        throw mse;
-            	    }
-
-
-            	    }
-            	    break;
-
-            	default :
-            	    if ( cnt3 >= 1 ) break loop3;
-                        EarlyExitException eee =
-                            new EarlyExitException(3, input);
-                        throw eee;
-                }
-                cnt3++;
-            } while (true);
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        	// do for sure before leaving
-        }
-    }
-    // $ANTLR end "NUMBER"
-
     // $ANTLR start "QUOTEDLITERAL"
     public final void mQUOTEDLITERAL() throws RecognitionException {
         try {
             int _type = QUOTEDLITERAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:262:5: ( '\"' ( EscapeSequence |~ ( '\\\\' | '\"' | '\\r' | '\\n' ) )* '\"' )
-            // Instancer.g:262:9: '\"' ( EscapeSequence |~ ( '\\\\' | '\"' | '\\r' | '\\n' ) )* '\"'
+            // Instancer.g:242:5: ( '\"' ( ESCAPESEQUENCE |~ ( '\\\\' | '\"' | '\\r' | '\\n' ) )* '\"' )
+            // Instancer.g:242:9: '\"' ( ESCAPESEQUENCE |~ ( '\\\\' | '\"' | '\\r' | '\\n' ) )* '\"'
             {
             match('\"'); 
 
-            // Instancer.g:263:9: ( EscapeSequence |~ ( '\\\\' | '\"' | '\\r' | '\\n' ) )*
-            loop4:
+            // Instancer.g:243:9: ( ESCAPESEQUENCE |~ ( '\\\\' | '\"' | '\\r' | '\\n' ) )*
+            loop3:
             do {
-                int alt4=3;
-                int LA4_0 = input.LA(1);
+                int alt3=3;
+                int LA3_0 = input.LA(1);
 
-                if ( (LA4_0=='\\') ) {
-                    alt4=1;
+                if ( (LA3_0=='\\') ) {
+                    alt3=1;
                 }
-                else if ( ((LA4_0 >= '\u0000' && LA4_0 <= '\t')||(LA4_0 >= '\u000B' && LA4_0 <= '\f')||(LA4_0 >= '\u000E' && LA4_0 <= '!')||(LA4_0 >= '#' && LA4_0 <= '[')||(LA4_0 >= ']' && LA4_0 <= '\uFFFF')) ) {
-                    alt4=2;
+                else if ( ((LA3_0 >= '\u0000' && LA3_0 <= '\t')||(LA3_0 >= '\u000B' && LA3_0 <= '\f')||(LA3_0 >= '\u000E' && LA3_0 <= '!')||(LA3_0 >= '#' && LA3_0 <= '[')||(LA3_0 >= ']' && LA3_0 <= '\uFFFF')) ) {
+                    alt3=2;
                 }
 
 
-                switch (alt4) {
+                switch (alt3) {
             	case 1 :
-            	    // Instancer.g:263:13: EscapeSequence
+            	    // Instancer.g:243:13: ESCAPESEQUENCE
             	    {
-            	    mEscapeSequence(); 
+            	    mESCAPESEQUENCE(); 
 
 
             	    }
             	    break;
             	case 2 :
-            	    // Instancer.g:264:13: ~ ( '\\\\' | '\"' | '\\r' | '\\n' )
+            	    // Instancer.g:244:13: ~ ( '\\\\' | '\"' | '\\r' | '\\n' )
             	    {
             	    if ( (input.LA(1) >= '\u0000' && input.LA(1) <= '\t')||(input.LA(1) >= '\u000B' && input.LA(1) <= '\f')||(input.LA(1) >= '\u000E' && input.LA(1) <= '!')||(input.LA(1) >= '#' && input.LA(1) <= '[')||(input.LA(1) >= ']' && input.LA(1) <= '\uFFFF') ) {
             	        input.consume();
@@ -482,7 +424,7 @@ public class InstancerLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop4;
+            	    break loop3;
                 }
             } while (true);
 
@@ -504,55 +446,55 @@ public class InstancerLexer extends Lexer {
     }
     // $ANTLR end "QUOTEDLITERAL"
 
-    // $ANTLR start "EscapeSequence"
-    public final void mEscapeSequence() throws RecognitionException {
+    // $ANTLR start "ESCAPESEQUENCE"
+    public final void mESCAPESEQUENCE() throws RecognitionException {
         try {
-            // Instancer.g:275:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ) )
-            // Instancer.g:275:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
+            // Instancer.g:253:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ) )
+            // Instancer.g:253:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
             {
             match('\\'); 
 
-            // Instancer.g:275:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
-            int alt5=11;
+            // Instancer.g:253:14: ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' | ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) ( '0' .. '7' ) | ( '0' .. '7' ) )
+            int alt4=11;
             switch ( input.LA(1) ) {
             case 'b':
                 {
-                alt5=1;
+                alt4=1;
                 }
                 break;
             case 't':
                 {
-                alt5=2;
+                alt4=2;
                 }
                 break;
             case 'n':
                 {
-                alt5=3;
+                alt4=3;
                 }
                 break;
             case 'f':
                 {
-                alt5=4;
+                alt4=4;
                 }
                 break;
             case 'r':
                 {
-                alt5=5;
+                alt4=5;
                 }
                 break;
             case '\"':
                 {
-                alt5=6;
+                alt4=6;
                 }
                 break;
             case '\'':
                 {
-                alt5=7;
+                alt4=7;
                 }
                 break;
             case '\\':
                 {
-                alt5=8;
+                alt4=8;
                 }
                 break;
             case '0':
@@ -560,20 +502,20 @@ public class InstancerLexer extends Lexer {
             case '2':
             case '3':
                 {
-                int LA5_9 = input.LA(2);
+                int LA4_9 = input.LA(2);
 
-                if ( ((LA5_9 >= '0' && LA5_9 <= '7')) ) {
-                    int LA5_11 = input.LA(3);
+                if ( ((LA4_9 >= '0' && LA4_9 <= '7')) ) {
+                    int LA4_11 = input.LA(3);
 
-                    if ( ((LA5_11 >= '0' && LA5_11 <= '7')) ) {
-                        alt5=9;
+                    if ( ((LA4_11 >= '0' && LA4_11 <= '7')) ) {
+                        alt4=9;
                     }
                     else {
-                        alt5=10;
+                        alt4=10;
                     }
                 }
                 else {
-                    alt5=11;
+                    alt4=11;
                 }
                 }
                 break;
@@ -582,83 +524,83 @@ public class InstancerLexer extends Lexer {
             case '6':
             case '7':
                 {
-                int LA5_10 = input.LA(2);
+                int LA4_10 = input.LA(2);
 
-                if ( ((LA5_10 >= '0' && LA5_10 <= '7')) ) {
-                    alt5=10;
+                if ( ((LA4_10 >= '0' && LA4_10 <= '7')) ) {
+                    alt4=10;
                 }
                 else {
-                    alt5=11;
+                    alt4=11;
                 }
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 5, 0, input);
+                    new NoViableAltException("", 4, 0, input);
 
                 throw nvae;
 
             }
 
-            switch (alt5) {
+            switch (alt4) {
                 case 1 :
-                    // Instancer.g:276:18: 'b'
+                    // Instancer.g:254:18: 'b'
                     {
                     match('b'); 
 
                     }
                     break;
                 case 2 :
-                    // Instancer.g:277:18: 't'
+                    // Instancer.g:255:18: 't'
                     {
                     match('t'); 
 
                     }
                     break;
                 case 3 :
-                    // Instancer.g:278:18: 'n'
+                    // Instancer.g:256:18: 'n'
                     {
                     match('n'); 
 
                     }
                     break;
                 case 4 :
-                    // Instancer.g:279:18: 'f'
+                    // Instancer.g:257:18: 'f'
                     {
                     match('f'); 
 
                     }
                     break;
                 case 5 :
-                    // Instancer.g:280:18: 'r'
+                    // Instancer.g:258:18: 'r'
                     {
                     match('r'); 
 
                     }
                     break;
                 case 6 :
-                    // Instancer.g:281:18: '\\\"'
+                    // Instancer.g:259:18: '\\\"'
                     {
                     match('\"'); 
 
                     }
                     break;
                 case 7 :
-                    // Instancer.g:282:18: '\\''
+                    // Instancer.g:260:18: '\\''
                     {
                     match('\''); 
 
                     }
                     break;
                 case 8 :
-                    // Instancer.g:283:18: '\\\\'
+                    // Instancer.g:261:18: '\\\\'
                     {
                     match('\\'); 
 
                     }
                     break;
                 case 9 :
-                    // Instancer.g:284:18: ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    // Instancer.g:262:18: ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                     {
                     if ( (input.LA(1) >= '0' && input.LA(1) <= '3') ) {
                         input.consume();
@@ -693,7 +635,7 @@ public class InstancerLexer extends Lexer {
                     }
                     break;
                 case 10 :
-                    // Instancer.g:285:18: ( '0' .. '7' ) ( '0' .. '7' )
+                    // Instancer.g:263:18: ( '0' .. '7' ) ( '0' .. '7' )
                     {
                     if ( (input.LA(1) >= '0' && input.LA(1) <= '7') ) {
                         input.consume();
@@ -718,7 +660,7 @@ public class InstancerLexer extends Lexer {
                     }
                     break;
                 case 11 :
-                    // Instancer.g:286:18: ( '0' .. '7' )
+                    // Instancer.g:264:18: ( '0' .. '7' )
                     {
                     if ( (input.LA(1) >= '0' && input.LA(1) <= '7') ) {
                         input.consume();
@@ -744,29 +686,29 @@ public class InstancerLexer extends Lexer {
         	// do for sure before leaving
         }
     }
-    // $ANTLR end "EscapeSequence"
+    // $ANTLR end "ESCAPESEQUENCE"
 
     // $ANTLR start "WHITESPACE"
     public final void mWHITESPACE() throws RecognitionException {
         try {
             int _type = WHITESPACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:301:12: ( ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+ )
-            // Instancer.g:301:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
+            // Instancer.g:270:12: ( ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+ )
+            // Instancer.g:270:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
             {
-            // Instancer.g:301:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
-            int cnt6=0;
-            loop6:
+            // Instancer.g:270:14: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
+            int cnt5=0;
+            loop5:
             do {
-                int alt6=2;
-                int LA6_0 = input.LA(1);
+                int alt5=2;
+                int LA5_0 = input.LA(1);
 
-                if ( ((LA6_0 >= '\t' && LA6_0 <= '\n')||(LA6_0 >= '\f' && LA6_0 <= '\r')||LA6_0==' ') ) {
-                    alt6=1;
+                if ( ((LA5_0 >= '\t' && LA5_0 <= '\n')||(LA5_0 >= '\f' && LA5_0 <= '\r')||LA5_0==' ') ) {
+                    alt5=1;
                 }
 
 
-                switch (alt6) {
+                switch (alt5) {
             	case 1 :
             	    // Instancer.g:
             	    {
@@ -784,12 +726,12 @@ public class InstancerLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt6 >= 1 ) break loop6;
+            	    if ( cnt5 >= 1 ) break loop5;
                         EarlyExitException eee =
-                            new EarlyExitException(6, input);
+                            new EarlyExitException(5, input);
                         throw eee;
                 }
-                cnt6++;
+                cnt5++;
             } while (true);
 
 
@@ -806,10 +748,77 @@ public class InstancerLexer extends Lexer {
     }
     // $ANTLR end "WHITESPACE"
 
+    // $ANTLR start "COMMENT"
+    public final void mCOMMENT() throws RecognitionException {
+        try {
+            int _type = COMMENT;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // Instancer.g:272:12: ( '/*' ( . )* '*/' )
+            // Instancer.g:272:14: '/*' ( . )* '*/'
+            {
+            match("/*"); 
+
+
+
+            // Instancer.g:272:19: ( . )*
+            loop6:
+            do {
+                int alt6=2;
+                int LA6_0 = input.LA(1);
+
+                if ( (LA6_0=='*') ) {
+                    int LA6_1 = input.LA(2);
+
+                    if ( (LA6_1=='/') ) {
+                        alt6=2;
+                    }
+                    else if ( ((LA6_1 >= '\u0000' && LA6_1 <= '.')||(LA6_1 >= '0' && LA6_1 <= '\uFFFF')) ) {
+                        alt6=1;
+                    }
+
+
+                }
+                else if ( ((LA6_0 >= '\u0000' && LA6_0 <= ')')||(LA6_0 >= '+' && LA6_0 <= '\uFFFF')) ) {
+                    alt6=1;
+                }
+
+
+                switch (alt6) {
+            	case 1 :
+            	    // Instancer.g:272:19: .
+            	    {
+            	    matchAny(); 
+
+            	    }
+            	    break;
+
+            	default :
+            	    break loop6;
+                }
+            } while (true);
+
+
+            match("*/"); 
+
+
+
+             _channel = HIDDEN; 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        	// do for sure before leaving
+        }
+    }
+    // $ANTLR end "COMMENT"
+
     // $ANTLR start "DIGIT"
     public final void mDIGIT() throws RecognitionException {
         try {
-            // Instancer.g:303:17: ( '0' .. '9' )
+            // Instancer.g:274:17: ( '0' .. '9' )
             // Instancer.g:
             {
             if ( (input.LA(1) >= '0' && input.LA(1) <= '9') ) {
@@ -833,7 +842,7 @@ public class InstancerLexer extends Lexer {
     // $ANTLR end "DIGIT"
 
     public void mTokens() throws RecognitionException {
-        // Instancer.g:1:8: ( T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | IDENTIFIER | CLASSNAME | NUMBER | QUOTEDLITERAL | WHITESPACE )
+        // Instancer.g:1:8: ( T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | IDENTIFIER | CLASSNAME | QUOTEDLITERAL | WHITESPACE | COMMENT )
         int alt7=14;
         alt7 = dfa7.predict(input);
         switch (alt7) {
@@ -926,25 +935,25 @@ public class InstancerLexer extends Lexer {
                 }
                 break;
             case 12 :
-                // Instancer.g:1:85: NUMBER
-                {
-                mNUMBER(); 
-
-
-                }
-                break;
-            case 13 :
-                // Instancer.g:1:92: QUOTEDLITERAL
+                // Instancer.g:1:85: QUOTEDLITERAL
                 {
                 mQUOTEDLITERAL(); 
 
 
                 }
                 break;
-            case 14 :
-                // Instancer.g:1:106: WHITESPACE
+            case 13 :
+                // Instancer.g:1:99: WHITESPACE
                 {
                 mWHITESPACE(); 
+
+
+                }
+                break;
+            case 14 :
+                // Instancer.g:1:110: COMMENT
+                {
+                mCOMMENT(); 
 
 
                 }
@@ -973,8 +982,8 @@ public class InstancerLexer extends Lexer {
     static final String DFA7_specialS =
         "\36\uffff}>";
     static final String[] DFA7_transitionS = {
-            "\2\15\1\uffff\2\15\22\uffff\1\15\1\uffff\1\14\5\uffff\1\1\1"+
-            "\2\6\uffff\12\13\1\uffff\1\3\1\4\1\uffff\1\5\2\uffff\32\12\6"+
+            "\2\14\1\uffff\2\14\22\uffff\1\14\1\uffff\1\13\5\uffff\1\1\1"+
+            "\2\5\uffff\1\15\13\uffff\1\3\1\4\1\uffff\1\5\2\uffff\32\12\6"+
             "\uffff\10\12\1\6\2\12\1\7\16\12\1\10\1\uffff\1\11",
             "",
             "",
@@ -1037,7 +1046,7 @@ public class InstancerLexer extends Lexer {
             this.transition = DFA7_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | IDENTIFIER | CLASSNAME | NUMBER | QUOTEDLITERAL | WHITESPACE );";
+            return "1:1: Tokens : ( T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | IDENTIFIER | CLASSNAME | QUOTEDLITERAL | WHITESPACE | COMMENT );";
         }
     }
  

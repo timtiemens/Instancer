@@ -50,7 +50,7 @@ grammar Instancer;
     @Override
     public void reportError(RecognitionException e) 
     {
- //       super.reportError(e);
+        super.reportError(e);
         addException(e);
     }
 }
@@ -85,7 +85,6 @@ grammar Instancer;
 
 @parser::members 
 {
-
     private final InstancerCode instancerCode = new InstancerCode();
     private InstancerLexer theLexer;
     private void rememberLexer(InstancerLexer in)
@@ -164,26 +163,7 @@ grammar Instancer;
     
     public static ANTLRReaderStream getReaderStream(String[] args) throws Exception
     {
-        ANTLRReaderStream input = null;
-        if (args.length > 0)
-        {
-            String arg = args[0];
-            if (arg.indexOf(" ") >= 0)
-            {
-               System.out.println("STRING is " + arg);
-               StringReader stream = new StringReader(arg);
-               input = new ANTLRReaderStream(stream);
-            }
-            else
-            {
-               input = new ANTLRReaderStream(new FileReader(arg));
-            }
-        }
-        else
-        {
-            input = new ANTLRInputStream(System.in);
-        }
-        return input;
+        return InstancerCode.MainUtils.getReaderStream(args);
     }
     /*
         if you do this, it still prints
@@ -202,7 +182,7 @@ grammar Instancer;
  *------------------------------------------------------------------*/
 
 top returns [List<Object> toplist]
-           @init { $toplist = new java.util.ArrayList<Object>(); }
+        @init { $toplist = new java.util.ArrayList<Object>(); }
     : initStatements? c=topInner { toplist.add($c.value); }
     ;
     /* if you do this .. 
@@ -233,7 +213,7 @@ classname returns [String value]
     ;
 
 arglist returns [List<Object> list]
-    @init {  $list = new ArrayList<Object>();   }
+        @init {  $list = new ArrayList<Object>();   }
     :  '('
         (   ( c=QUOTEDLITERAL {$list.add(c.getText());  }  )
           | ( a=topInner      {$list.add($a.value);     }  )
@@ -255,12 +235,12 @@ CLASSNAME
    : IDENTIFIER ( '.' IDENTIFIER )*
    ;
     
-NUMBER  : (DIGIT)+ ;
+/*  {NUMBER is not used}   NUMBER  : (DIGIT)+ ; */
 
 
 QUOTEDLITERAL
     :   '"' 
-        (   EscapeSequence
+        (   ESCAPESEQUENCE
         |   ~( '\\' | '"' | '\r' | '\n' )        
         )* 
         '"'    { setText( getText().substring(1, getText().length() - 1) );
@@ -269,8 +249,7 @@ QUOTEDLITERAL
     ;
 
 
-fragment
-EscapeSequence 
+fragment ESCAPESEQUENCE
     :   '\\' (
                  'b' 
              |   't' 
@@ -286,6 +265,15 @@ EscapeSequence
              )          
     ;     
 
+
+
+WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
+
+COMMENT    : '/*' .* '*/'                               { $channel = HIDDEN; } ; /* see Note-5 */ 
+
+fragment DIGIT  : '0'..'9' ;
+
+
            
  
 /*    [See Note-2]
@@ -298,14 +286,11 @@ STRING
    
 
 
-WHITESPACE : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+    { $channel = HIDDEN; } ;
-
-fragment DIGIT  : '0'..'9' ;
-
-
 /* Reference URLs
      http://jnb.ociweb.com/jnb/jnbJun2008.html
-     http://www.antlr.org/wiki/display/ANTLR3/Lexer+grammar+for+floating+point,+dot,+range,+time+specs 
+     http://www.antlr.org/wiki/display/ANTLR3/Lexer+grammar+for+floating+point,+dot,+range,+time+specs
+     http://www.antlr.org/wiki/display/ANTLR3/Migrating+from+ANTLR+2+to+ANTLR+3
+     http://code.google.com/p/sfig/
  */
 /* Note-1: IfItStartsWithUpper - it is a lexer rule
            ifItStartsWithLower - it is a parser rule
@@ -314,7 +299,7 @@ fragment DIGIT  : '0'..'9' ;
            part of the global lexer space.
            So, having extra stuff is a bad idea..
  */
- /* Note-3 - 
+/* Note-3 - 
     started with just c=CLASSNAME. 
     then, when I tried input of << (new Date "12345") >>
        I got an error:     
@@ -323,12 +308,20 @@ fragment DIGIT  : '0'..'9' ;
        adding c=IDENTIFIER makes the error go away.
     Then, the "bare" Date matches IDENTIFIER.
  */
- /* Note-4 -
+/* Note-4 -
+     MODIFIED!! - now QUOTEDLITERAL does its own unescaping
+     Previous note....
      Any use of  QUOTEDLITERAL must call
         instancerCode.unescape($c.getText()));
      Because of the nifty-cool "EscapeSequence" target that allows the escape
          character '\'.
      That way, embedded quotations (") can be escaped as \", yet still
          make it to the program as just ".
-     MODIFIED!! - now QUOTEDLITERAL does its own unescaping
-  */         
+     
+ */         
+/* Note-5 -
+     This rule was added very late in development.  
+     So, independent from the other rules, this 1 line gave 
+         the system the ability to parse out and ignore comment blocks.
+ */
+           
