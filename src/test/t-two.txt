@@ -1,7 +1,5 @@
-<new java.lang.IllegalArgumentException
-     (
+(new java.lang.IllegalArgumentException
        "message" 
-       <new java.lang.Exception("causedby")>
-     )
->
+       (new java.lang.Exception "causedby")
+)
 

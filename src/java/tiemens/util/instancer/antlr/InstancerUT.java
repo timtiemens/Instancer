@@ -43,17 +43,16 @@ public class InstancerUT
 {
     public void testDoubleQuotes()
     {
-        runOn("<new java.lang.String(\"1234567899\")>");
+        runOn("(new java.lang.String \"1234567899\")");
     }
     
     public void testList()
     {
-        List<Object> ret = runOn("<list java.util.ArrayList(" +
-                                    "<new java.lang.Long(\"132456789012\")>" +
-                                    "<new java.util.Date " +
-                                        "(<new java.lang.Long(\"132456789012\")> )>" +
-                                     ")" +
-                                     ">");
+        List<Object> ret = runOn("(list java.util.ArrayList" +
+                                    "(new java.lang.Long \"132456789012\")" +
+                                    "(new java.util.Date " +
+                                        "(new java.lang.Long \"132456789012\") )" +
+                                     ")");
         Assert.assertEquals("size mismatch", 1, ret.size());
         Assert.assertEquals("type wrong", "java.util.ArrayList", ret.get(0).getClass().getName());
         java.util.ArrayList<?> arraylist = (java.util.ArrayList<?>) ret.get(0);

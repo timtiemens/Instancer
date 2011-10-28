@@ -199,7 +199,7 @@ initStatementChoice
     ;  
    
 topInner returns [Object value]
-    : '<' cmd=command clz=classname args=arglist '>'   { $value = instancerCode.create($cmd.value, $clz.value, $args.list); }
+    : '(' cmd=command clz=classname args=arglist ')'   { $value = instancerCode.create($cmd.value, $clz.value, $args.list); }
     /* | c=QUOTEDLITERAL                                  { $value = c.getText(); } */
     ;
     
@@ -214,11 +214,11 @@ classname returns [String value]
 
 arglist returns [List<Object> list]
         @init {  $list = new ArrayList<Object>();   }
-    :  '('
+    :  
         (   ( c=QUOTEDLITERAL {$list.add(c.getText());  }  )
           | ( a=topInner      {$list.add($a.value);     }  )
         )*
-        ')'  
+       
     ;
   
      

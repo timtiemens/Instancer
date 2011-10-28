@@ -1,4 +1,4 @@
-// $ANTLR 3.4 Instancer.g 2011-10-28 17:46:11
+// $ANTLR 3.4 Instancer.g 2011-10-28 18:11:59
 
    package tiemens.util.instancer.antlr; 
 
@@ -18,8 +18,6 @@ public class InstancerLexer extends Lexer {
     public static final int T__15=15;
     public static final int T__16=16;
     public static final int T__17=17;
-    public static final int T__18=18;
-    public static final int T__19=19;
     public static final int CLASSNAME=4;
     public static final int COMMENT=5;
     public static final int DIGIT=6;
@@ -135,10 +133,12 @@ public class InstancerLexer extends Lexer {
         try {
             int _type = T__14;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:33:7: ( '<' )
-            // Instancer.g:33:9: '<'
+            // Instancer.g:33:7: ( 'import' )
+            // Instancer.g:33:9: 'import'
             {
-            match('<'); 
+            match("import"); 
+
+
 
             }
 
@@ -156,10 +156,12 @@ public class InstancerLexer extends Lexer {
         try {
             int _type = T__15;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:34:7: ( '>' )
-            // Instancer.g:34:9: '>'
+            // Instancer.g:34:7: ( 'logging' )
+            // Instancer.g:34:9: 'logging'
             {
-            match('>'); 
+            match("logging"); 
+
+
 
             }
 
@@ -177,12 +179,10 @@ public class InstancerLexer extends Lexer {
         try {
             int _type = T__16;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:35:7: ( 'import' )
-            // Instancer.g:35:9: 'import'
+            // Instancer.g:35:7: ( '{' )
+            // Instancer.g:35:9: '{'
             {
-            match("import"); 
-
-
+            match('{'); 
 
             }
 
@@ -200,52 +200,8 @@ public class InstancerLexer extends Lexer {
         try {
             int _type = T__17;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:36:7: ( 'logging' )
-            // Instancer.g:36:9: 'logging'
-            {
-            match("logging"); 
-
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        	// do for sure before leaving
-        }
-    }
-    // $ANTLR end "T__17"
-
-    // $ANTLR start "T__18"
-    public final void mT__18() throws RecognitionException {
-        try {
-            int _type = T__18;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:37:7: ( '{' )
-            // Instancer.g:37:9: '{'
-            {
-            match('{'); 
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        	// do for sure before leaving
-        }
-    }
-    // $ANTLR end "T__18"
-
-    // $ANTLR start "T__19"
-    public final void mT__19() throws RecognitionException {
-        try {
-            int _type = T__19;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // Instancer.g:38:7: ( '}' )
-            // Instancer.g:38:9: '}'
+            // Instancer.g:36:7: ( '}' )
+            // Instancer.g:36:9: '}'
             {
             match('}'); 
 
@@ -258,7 +214,7 @@ public class InstancerLexer extends Lexer {
         	// do for sure before leaving
         }
     }
-    // $ANTLR end "T__19"
+    // $ANTLR end "T__17"
 
     // $ANTLR start "IDENTIFIER"
     public final void mIDENTIFIER() throws RecognitionException {
@@ -842,8 +798,8 @@ public class InstancerLexer extends Lexer {
     // $ANTLR end "DIGIT"
 
     public void mTokens() throws RecognitionException {
-        // Instancer.g:1:8: ( T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | IDENTIFIER | CLASSNAME | QUOTEDLITERAL | WHITESPACE | COMMENT )
-        int alt7=14;
+        // Instancer.g:1:8: ( T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | IDENTIFIER | CLASSNAME | QUOTEDLITERAL | WHITESPACE | COMMENT )
+        int alt7=12;
         alt7 = dfa7.predict(input);
         switch (alt7) {
             case 1 :
@@ -903,55 +859,39 @@ public class InstancerLexer extends Lexer {
                 }
                 break;
             case 8 :
-                // Instancer.g:1:52: T__18
-                {
-                mT__18(); 
-
-
-                }
-                break;
-            case 9 :
-                // Instancer.g:1:58: T__19
-                {
-                mT__19(); 
-
-
-                }
-                break;
-            case 10 :
-                // Instancer.g:1:64: IDENTIFIER
+                // Instancer.g:1:52: IDENTIFIER
                 {
                 mIDENTIFIER(); 
 
 
                 }
                 break;
-            case 11 :
-                // Instancer.g:1:75: CLASSNAME
+            case 9 :
+                // Instancer.g:1:63: CLASSNAME
                 {
                 mCLASSNAME(); 
 
 
                 }
                 break;
-            case 12 :
-                // Instancer.g:1:85: QUOTEDLITERAL
+            case 10 :
+                // Instancer.g:1:73: QUOTEDLITERAL
                 {
                 mQUOTEDLITERAL(); 
 
 
                 }
                 break;
-            case 13 :
-                // Instancer.g:1:99: WHITESPACE
+            case 11 :
+                // Instancer.g:1:87: WHITESPACE
                 {
                 mWHITESPACE(); 
 
 
                 }
                 break;
-            case 14 :
-                // Instancer.g:1:110: COMMENT
+            case 12 :
+                // Instancer.g:1:98: COMMENT
                 {
                 mCOMMENT(); 
 
@@ -966,53 +906,51 @@ public class InstancerLexer extends Lexer {
 
     protected DFA7 dfa7 = new DFA7(this);
     static final String DFA7_eotS =
-        "\6\uffff\2\20\2\uffff\1\20\3\uffff\2\20\2\uffff\7\20\1\33\1\20\1"+
-        "\uffff\1\35\1\uffff";
+        "\4\uffff\2\16\2\uffff\1\16\3\uffff\2\16\2\uffff\7\16\1\31\1\16\1"+
+        "\uffff\1\33\1\uffff";
     static final String DFA7_eofS =
-        "\36\uffff";
+        "\34\uffff";
     static final String DFA7_minS =
-        "\1\11\5\uffff\2\56\2\uffff\1\56\3\uffff\2\56\2\uffff\11\56\1\uffff"+
+        "\1\11\3\uffff\2\56\2\uffff\1\56\3\uffff\2\56\2\uffff\11\56\1\uffff"+
         "\1\56\1\uffff";
     static final String DFA7_maxS =
-        "\1\175\5\uffff\2\172\2\uffff\1\172\3\uffff\2\172\2\uffff\11\172"+
+        "\1\175\3\uffff\2\172\2\uffff\1\172\3\uffff\2\172\2\uffff\11\172"+
         "\1\uffff\1\172\1\uffff";
     static final String DFA7_acceptS =
-        "\1\uffff\1\1\1\2\1\3\1\4\1\5\2\uffff\1\10\1\11\1\uffff\1\14\1\15"+
-        "\1\16\2\uffff\1\12\1\13\11\uffff\1\6\1\uffff\1\7";
+        "\1\uffff\1\1\1\2\1\3\2\uffff\1\6\1\7\1\uffff\1\12\1\13\1\14\2\uffff"+
+        "\1\10\1\11\11\uffff\1\4\1\uffff\1\5";
     static final String DFA7_specialS =
-        "\36\uffff}>";
+        "\34\uffff}>";
     static final String[] DFA7_transitionS = {
-            "\2\14\1\uffff\2\14\22\uffff\1\14\1\uffff\1\13\5\uffff\1\1\1"+
-            "\2\5\uffff\1\15\13\uffff\1\3\1\4\1\uffff\1\5\2\uffff\32\12\6"+
-            "\uffff\10\12\1\6\2\12\1\7\16\12\1\10\1\uffff\1\11",
+            "\2\12\1\uffff\2\12\22\uffff\1\12\1\uffff\1\11\5\uffff\1\1\1"+
+            "\2\5\uffff\1\13\13\uffff\1\3\5\uffff\32\10\6\uffff\10\10\1\4"+
+            "\2\10\1\5\16\10\1\6\1\uffff\1\7",
             "",
             "",
             "",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\14\15\1\14\15\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\16\15\1\20\13\15",
             "",
             "",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\14\17\1\16\15\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\16\17\1\22\13\17",
-            "",
-            "",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\32\17",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\32\15",
             "",
             "",
             "",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\17\17\1\23\12\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\32\17",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\17\15\1\21\12\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\32\15",
             "",
             "",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\6\17\1\24\23\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\16\17\1\25\13\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\6\17\1\26\23\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\21\17\1\27\10\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\10\17\1\30\21\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\23\17\1\31\6\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\15\17\1\32\14\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\32\17",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\6\17\1\34\23\17",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\6\15\1\22\23\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\16\15\1\23\13\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\6\15\1\24\23\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\21\15\1\25\10\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\10\15\1\26\21\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\23\15\1\27\6\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\15\15\1\30\14\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\32\15",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\6\15\1\32\23\15",
             "",
-            "\1\21\1\uffff\12\17\7\uffff\32\17\6\uffff\32\17",
+            "\1\17\1\uffff\12\15\7\uffff\32\15\6\uffff\32\15",
             ""
     };
 
@@ -1046,7 +984,7 @@ public class InstancerLexer extends Lexer {
             this.transition = DFA7_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | T__18 | T__19 | IDENTIFIER | CLASSNAME | QUOTEDLITERAL | WHITESPACE | COMMENT );";
+            return "1:1: Tokens : ( T__11 | T__12 | T__13 | T__14 | T__15 | T__16 | T__17 | IDENTIFIER | CLASSNAME | QUOTEDLITERAL | WHITESPACE | COMMENT );";
         }
     }
  
