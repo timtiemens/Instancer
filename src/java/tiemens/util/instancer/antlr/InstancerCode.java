@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.antlr.runtime.ANTLRInputStream;
@@ -74,17 +73,18 @@ public class InstancerCode
     public void addImport(final String fullyQualifiedName)
     {
         logger.fine("I see import of '" + fullyQualifiedName + "'");
+        
         String[] pieces = fullyQualifiedName.split("\\.");
         logger.fine("#pieces = " + pieces.length);
+
         final String key = pieces[pieces.length - 1];
-        logger.fine("Import '" + key + "' to '" + fullyQualifiedName + "'");
         importMap.put(key, fullyQualifiedName);
+        logger.fine("Import '" + key + "' to '" + fullyQualifiedName + "'");
     }
     
     public void configureLogging(final String loggingConfigureString)
     {
-        //logger.info("I see logging of '" + loggingConfigureString + "'" +
-        //            " this is not yet implemented.");
+        logger.fine("I see logging of '" + loggingConfigureString + "'");
         Level newLevel = null;
         
         try
@@ -98,6 +98,8 @@ public class InstancerCode
         
         if (newLevel != null)
         {
+            // If the handler level is too high, you won't see stuff
+            // So, change the handler(s) if needed:
             updateHandlers(newLevel, logger, loggingConfigureString);
             
             logger.setLevel(newLevel);
@@ -112,6 +114,16 @@ public class InstancerCode
 
     }
     
+    /**
+     * If loggingConfigureString is NOT UPPER CASE,
+     * Then
+     *    If uselogger's handler(s) are examined and changed if they
+     *       would not log at 'newLevel'
+     * 
+     * @param newLevel the parsed loggingConfigureString
+     * @param uselogger whose handler(s) we change
+     * @param loggingConfigureString original configuration string
+     */
     private void updateHandlers(Level newLevel,
                                 Logger uselogger,
                                 String loggingConfigureString) 
@@ -149,7 +161,7 @@ public class InstancerCode
         }
     }
 
-    /** changing logging levels and loggin stuff meta-problem...*/
+    /** changing logging levels and logging stuff: a meta-problem...*/
     private void metaLoggerInfo(String string) 
     {
         // System.out.println(string);
@@ -240,22 +252,22 @@ public class InstancerCode
             ret = null;
         } catch (IllegalArgumentException e) 
         {
-            logger.severe("Coulnd not invoke newInstance, IllegalArgument: " + e);
+            logger.severe("Could not invoke newInstance, IllegalArgument: " + e);
             ret = null;
         } catch (InstantiationException e) 
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.severe("Could not instantiate: " + e);
+            ret = null;
         }
         catch (IllegalAccessException e) 
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.severe("Could not access: " + e);
+            ret = null;
         } 
         catch (InvocationTargetException e) 
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.severe("Could not invoke: " + e);
+            ret = null;
         }
         
         return ret;
@@ -270,19 +282,12 @@ public class InstancerCode
         
         if (argobj != null)
         {
-//            if (argobj.getClass().isArray())
-//            {
-//                addto = (Object[]) argobj;
-//            }
-//            else 
-//            {
-                addto = argobj.toArray(new Object[0]);
-//            }
+            addto = argobj.toArray(new Object[0]);
         }
         
         
         Object container = createNew(clzname, null);
-        if (container instanceof java.util.List)
+        if (container instanceof java.util.List<?>)
         {
             List<Object> list = unsafe(container);
             
@@ -294,8 +299,11 @@ public class InstancerCode
         }
         else
         {
-            logger.fine("NO IDEA HOW TO ADD to " +
-                               container.getClass().getName());
+            String msg = "ERROR: class '" + clzname + "' must implement " +
+                         "java.util.List.  Cannot add elements to type '" +
+                         container.getClass().getName() + "'.";
+            logger.severe(msg);
+            throw new IllegalArgumentException(msg);
         }
         return container;
     }
@@ -314,6 +322,8 @@ public class InstancerCode
         {
             usename = importMap.get(usename);
         }
+        
+        
         try
         {
             return Class.forName(usename);
@@ -520,15 +530,8 @@ public class InstancerCode
         {
             List<Object> ret = new ArrayList<Object>();
         
-            // BIG TODO
-//            if (argobj instanceof Array)
-//            {
-//                
-//            }
-//            else
-//            {
-                ret.addAll(arglist);
-//            }
+            ret.addAll(arglist);
+
             return ret.toArray(new Object[0]);
         }
     }
@@ -559,7 +562,12 @@ public class InstancerCode
         }
     }
     
-    
+
+    /**
+     * Helper stuff to use from Instancer.g 
+     * (and anywhere else if wanted).
+     * 
+     */
     public static class MainUtils
     {
         /**

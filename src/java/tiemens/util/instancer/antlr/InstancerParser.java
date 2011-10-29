@@ -1,4 +1,4 @@
-// $ANTLR 3.4 Instancer.g 2011-10-28 18:11:59
+// $ANTLR 3.4 Instancer.g 2011-10-29 12:00:55
   
    package tiemens.util.instancer.antlr;
    
@@ -56,29 +56,12 @@ public class InstancerParser extends Parser {
     public String getGrammarFileName() { return "Instancer.g"; }
 
 
-        private final InstancerCode instancerCode = new InstancerCode();
-        private InstancerLexer theLexer;
-        private void rememberLexer(InstancerLexer in)
-        { 
-            theLexer = in;
-        }
-        public List<RecognitionException> getLexerExceptions() 
-        {
-            return theLexer.getExceptions();
-        }
-        /*
-            if you do this   ... it works, but is not necessary
-        @Override
-        public void reportError(RecognitionException re)
-        {
-            theLexer.addException(re);
-        }
-        */
-        public static InstancerParser create(String[] args) throws Exception 
-        {
-            ANTLRReaderStream input = getReaderStream(args);
-            return create(input);
-        }
+        
+        /* ============================================================
+         *  Use this factory.
+         *      Do not use new InstancerParser() directly.
+         * ============================================================
+         */
         public static InstancerParser create(ANTLRReaderStream input) throws Exception
         {
             InstancerLexer lexer = new InstancerLexer(input);
@@ -90,7 +73,12 @@ public class InstancerParser extends Parser {
             
             return parser;
         }
-        private List<Object> result = null;
+
+        /* ============================================================
+         *  Use this return method.
+         *      Do not use parser.top() directly.
+         * ============================================================
+         */
         public List<Object> getResultOrThrow() throws Exception
         {
             if (result == null)
@@ -117,10 +105,10 @@ public class InstancerParser extends Parser {
 
             try 
             {
-                List<Object> thelist = parser.getResultOrThrow();
+                List<Object> list = parser.getResultOrThrow();
                 
-                System.out.println("MAIN: toplist.size() = " + thelist.size());
-                Object zero = thelist.get(0);
+                System.out.println("MAIN: toplist.size() = " + list.size());
+                Object zero = list.get(0);
                 System.out.println("MAIN: [0]=" + zero);
                 System.out.println("MAIN: class name=" + zero.getClass().getName());
             } 
@@ -131,11 +119,28 @@ public class InstancerParser extends Parser {
                 e.printStackTrace(System.out);
             }
         }
-        
-        public static ANTLRReaderStream getReaderStream(String[] args) throws Exception
-        {
-            return InstancerCode.MainUtils.getReaderStream(args);
+
+
+        private List<Object> result = null;
+        private final InstancerCode instancerCode = new InstancerCode();
+        private InstancerLexer theLexer;
+        private void rememberLexer(InstancerLexer in)
+        { 
+            theLexer = in;
         }
+        public List<RecognitionException> getLexerExceptions() 
+        {
+            return theLexer.getExceptions();
+        }
+        /*
+            if you do this   ... it works, but is not necessary
+         *
+        @Override
+        public void reportError(RecognitionException re)
+        {
+            theLexer.addException(re);
+        }
+        */
         /*
             if you do this, it still prints
                 line 1:0 null
@@ -146,11 +151,21 @@ public class InstancerParser extends Parser {
             return null; 
         }
         */
+        
+        public static ANTLRReaderStream getReaderStream(String[] args) throws Exception
+        {
+            return InstancerCode.MainUtils.getReaderStream(args);
+        }
+        public static InstancerParser create(String[] args) throws Exception 
+        {
+            ANTLRReaderStream input = getReaderStream(args);
+            return create(input);
+        }
 
 
 
     // $ANTLR start "top"
-    // Instancer.g:184:1: top returns [List<Object> toplist] : ( initStatements )? c= topInner ;
+    // Instancer.g:201:1: top returns [List<Object> toplist] : ( initStatements )? c= topInner ;
     public final List<Object> top() throws RecognitionException {
         List<Object> toplist = null;
 
@@ -160,10 +175,10 @@ public class InstancerParser extends Parser {
 
          toplist = new java.util.ArrayList<Object>(); 
         try {
-            // Instancer.g:186:5: ( ( initStatements )? c= topInner )
-            // Instancer.g:186:7: ( initStatements )? c= topInner
+            // Instancer.g:203:5: ( ( initStatements )? c= topInner )
+            // Instancer.g:203:7: ( initStatements )? c= topInner
             {
-            // Instancer.g:186:7: ( initStatements )?
+            // Instancer.g:203:7: ( initStatements )?
             int alt1=2;
             int LA1_0 = input.LA(1);
 
@@ -172,9 +187,9 @@ public class InstancerParser extends Parser {
             }
             switch (alt1) {
                 case 1 :
-                    // Instancer.g:186:7: initStatements
+                    // Instancer.g:203:7: initStatements
                     {
-                    pushFollow(FOLLOW_initStatements_in_top90);
+                    pushFollow(FOLLOW_initStatements_in_top92);
                     initStatements();
 
                     state._fsp--;
@@ -186,7 +201,7 @@ public class InstancerParser extends Parser {
             }
 
 
-            pushFollow(FOLLOW_topInner_in_top95);
+            pushFollow(FOLLOW_topInner_in_top97);
             c=topInner();
 
             state._fsp--;
@@ -213,15 +228,15 @@ public class InstancerParser extends Parser {
 
 
     // $ANTLR start "initStatements"
-    // Instancer.g:192:1: initStatements : '{' ( initStatementChoice ';' )* '}' ;
+    // Instancer.g:209:1: initStatements : '{' ( initStatementChoice ';' )* '}' ;
     public final void initStatements() throws RecognitionException {
         try {
-            // Instancer.g:193:5: ( '{' ( initStatementChoice ';' )* '}' )
-            // Instancer.g:193:7: '{' ( initStatementChoice ';' )* '}'
+            // Instancer.g:210:5: ( '{' ( initStatementChoice ';' )* '}' )
+            // Instancer.g:210:7: '{' ( initStatementChoice ';' )* '}'
             {
-            match(input,16,FOLLOW_16_in_initStatements125); 
+            match(input,16,FOLLOW_16_in_initStatements127); 
 
-            // Instancer.g:193:11: ( initStatementChoice ';' )*
+            // Instancer.g:210:11: ( initStatementChoice ';' )*
             loop2:
             do {
                 int alt2=2;
@@ -234,15 +249,15 @@ public class InstancerParser extends Parser {
 
                 switch (alt2) {
             	case 1 :
-            	    // Instancer.g:193:12: initStatementChoice ';'
+            	    // Instancer.g:210:12: initStatementChoice ';'
             	    {
-            	    pushFollow(FOLLOW_initStatementChoice_in_initStatements128);
+            	    pushFollow(FOLLOW_initStatementChoice_in_initStatements130);
             	    initStatementChoice();
 
             	    state._fsp--;
 
 
-            	    match(input,13,FOLLOW_13_in_initStatements130); 
+            	    match(input,13,FOLLOW_13_in_initStatements132); 
 
             	    }
             	    break;
@@ -253,7 +268,7 @@ public class InstancerParser extends Parser {
             } while (true);
 
 
-            match(input,17,FOLLOW_17_in_initStatements134); 
+            match(input,17,FOLLOW_17_in_initStatements136); 
 
             }
 
@@ -274,14 +289,14 @@ public class InstancerParser extends Parser {
 
 
     // $ANTLR start "initStatementChoice"
-    // Instancer.g:196:1: initStatementChoice : ( 'import' clz= classname | 'logging' c= QUOTEDLITERAL );
+    // Instancer.g:213:1: initStatementChoice : ( 'import' clz= classname | 'logging' c= QUOTEDLITERAL );
     public final void initStatementChoice() throws RecognitionException {
         Token c=null;
         String clz =null;
 
 
         try {
-            // Instancer.g:197:5: ( 'import' clz= classname | 'logging' c= QUOTEDLITERAL )
+            // Instancer.g:214:5: ( 'import' clz= classname | 'logging' c= QUOTEDLITERAL )
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -300,11 +315,11 @@ public class InstancerParser extends Parser {
             }
             switch (alt3) {
                 case 1 :
-                    // Instancer.g:197:7: 'import' clz= classname
+                    // Instancer.g:214:7: 'import' clz= classname
                     {
-                    match(input,14,FOLLOW_14_in_initStatementChoice151); 
+                    match(input,14,FOLLOW_14_in_initStatementChoice153); 
 
-                    pushFollow(FOLLOW_classname_in_initStatementChoice156);
+                    pushFollow(FOLLOW_classname_in_initStatementChoice158);
                     clz=classname();
 
                     state._fsp--;
@@ -315,11 +330,11 @@ public class InstancerParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // Instancer.g:198:7: 'logging' c= QUOTEDLITERAL
+                    // Instancer.g:215:7: 'logging' c= QUOTEDLITERAL
                     {
-                    match(input,15,FOLLOW_15_in_initStatementChoice169); 
+                    match(input,15,FOLLOW_15_in_initStatementChoice171); 
 
-                    c=(Token)match(input,QUOTEDLITERAL,FOLLOW_QUOTEDLITERAL_in_initStatementChoice173); 
+                    c=(Token)match(input,QUOTEDLITERAL,FOLLOW_QUOTEDLITERAL_in_initStatementChoice175); 
 
                      instancerCode.configureLogging(c.getText()); 
 
@@ -344,7 +359,7 @@ public class InstancerParser extends Parser {
 
 
     // $ANTLR start "topInner"
-    // Instancer.g:201:1: topInner returns [Object value] : '(' cmd= command clz= classname args= arglist ')' ;
+    // Instancer.g:218:1: topInner returns [Object value] : '(' cmd= command clz= classname args= arglist ')' ;
     public final Object topInner() throws RecognitionException {
         Object value = null;
 
@@ -357,30 +372,30 @@ public class InstancerParser extends Parser {
 
 
         try {
-            // Instancer.g:202:5: ( '(' cmd= command clz= classname args= arglist ')' )
-            // Instancer.g:202:7: '(' cmd= command clz= classname args= arglist ')'
+            // Instancer.g:219:5: ( '(' cmd= command clz= classname args= arglist ')' )
+            // Instancer.g:219:7: '(' cmd= command clz= classname args= arglist ')'
             {
-            match(input,11,FOLLOW_11_in_topInner204); 
+            match(input,11,FOLLOW_11_in_topInner206); 
 
-            pushFollow(FOLLOW_command_in_topInner208);
+            pushFollow(FOLLOW_command_in_topInner210);
             cmd=command();
 
             state._fsp--;
 
 
-            pushFollow(FOLLOW_classname_in_topInner212);
+            pushFollow(FOLLOW_classname_in_topInner214);
             clz=classname();
 
             state._fsp--;
 
 
-            pushFollow(FOLLOW_arglist_in_topInner216);
+            pushFollow(FOLLOW_arglist_in_topInner218);
             args=arglist();
 
             state._fsp--;
 
 
-            match(input,12,FOLLOW_12_in_topInner218); 
+            match(input,12,FOLLOW_12_in_topInner220); 
 
              value = instancerCode.create(cmd, clz, args); 
 
@@ -403,7 +418,7 @@ public class InstancerParser extends Parser {
 
 
     // $ANTLR start "command"
-    // Instancer.g:206:1: command returns [String value] : c= IDENTIFIER ;
+    // Instancer.g:223:1: command returns [String value] : c= IDENTIFIER ;
     public final String command() throws RecognitionException {
         String value = null;
 
@@ -411,10 +426,10 @@ public class InstancerParser extends Parser {
         Token c=null;
 
         try {
-            // Instancer.g:207:5: (c= IDENTIFIER )
-            // Instancer.g:207:7: c= IDENTIFIER
+            // Instancer.g:224:5: (c= IDENTIFIER )
+            // Instancer.g:224:7: c= IDENTIFIER
             {
-            c=(Token)match(input,IDENTIFIER,FOLLOW_IDENTIFIER_in_command256); 
+            c=(Token)match(input,IDENTIFIER,FOLLOW_IDENTIFIER_in_command258); 
 
              value = c.getText(); 
 
@@ -437,7 +452,7 @@ public class InstancerParser extends Parser {
 
 
     // $ANTLR start "classname"
-    // Instancer.g:210:1: classname returns [String value] : (c= CLASSNAME |c= IDENTIFIER );
+    // Instancer.g:227:1: classname returns [String value] : (c= CLASSNAME |c= IDENTIFIER );
     public final String classname() throws RecognitionException {
         String value = null;
 
@@ -445,7 +460,7 @@ public class InstancerParser extends Parser {
         Token c=null;
 
         try {
-            // Instancer.g:211:5: (c= CLASSNAME |c= IDENTIFIER )
+            // Instancer.g:228:5: (c= CLASSNAME |c= IDENTIFIER )
             int alt4=2;
             int LA4_0 = input.LA(1);
 
@@ -464,18 +479,18 @@ public class InstancerParser extends Parser {
             }
             switch (alt4) {
                 case 1 :
-                    // Instancer.g:211:8: c= CLASSNAME
+                    // Instancer.g:228:8: c= CLASSNAME
                     {
-                    c=(Token)match(input,CLASSNAME,FOLLOW_CLASSNAME_in_classname282); 
+                    c=(Token)match(input,CLASSNAME,FOLLOW_CLASSNAME_in_classname285); 
 
                      value = c.getText(); 
 
                     }
                     break;
                 case 2 :
-                    // Instancer.g:212:8: c= IDENTIFIER
+                    // Instancer.g:229:8: c= IDENTIFIER
                     {
-                    c=(Token)match(input,IDENTIFIER,FOLLOW_IDENTIFIER_in_classname297); 
+                    c=(Token)match(input,IDENTIFIER,FOLLOW_IDENTIFIER_in_classname300); 
 
                      value = c.getText(); 
 
@@ -500,7 +515,7 @@ public class InstancerParser extends Parser {
 
 
     // $ANTLR start "arglist"
-    // Instancer.g:215:1: arglist returns [List<Object> list] : ( (c= QUOTEDLITERAL ) | (a= topInner ) )* ;
+    // Instancer.g:232:1: arglist returns [List<Object> list] : ( (c= QUOTEDLITERAL ) | (a= topInner ) )* ;
     public final List<Object> arglist() throws RecognitionException {
         List<Object> list = null;
 
@@ -511,10 +526,10 @@ public class InstancerParser extends Parser {
 
           list = new ArrayList<Object>();   
         try {
-            // Instancer.g:217:5: ( ( (c= QUOTEDLITERAL ) | (a= topInner ) )* )
-            // Instancer.g:218:9: ( (c= QUOTEDLITERAL ) | (a= topInner ) )*
+            // Instancer.g:234:5: ( ( (c= QUOTEDLITERAL ) | (a= topInner ) )* )
+            // Instancer.g:235:9: ( (c= QUOTEDLITERAL ) | (a= topInner ) )*
             {
-            // Instancer.g:218:9: ( (c= QUOTEDLITERAL ) | (a= topInner ) )*
+            // Instancer.g:235:9: ( (c= QUOTEDLITERAL ) | (a= topInner ) )*
             loop5:
             do {
                 int alt5=3;
@@ -530,12 +545,12 @@ public class InstancerParser extends Parser {
 
                 switch (alt5) {
             	case 1 :
-            	    // Instancer.g:218:13: (c= QUOTEDLITERAL )
+            	    // Instancer.g:235:13: (c= QUOTEDLITERAL )
             	    {
-            	    // Instancer.g:218:13: (c= QUOTEDLITERAL )
-            	    // Instancer.g:218:15: c= QUOTEDLITERAL
+            	    // Instancer.g:235:13: (c= QUOTEDLITERAL )
+            	    // Instancer.g:235:15: c= QUOTEDLITERAL
             	    {
-            	    c=(Token)match(input,QUOTEDLITERAL,FOLLOW_QUOTEDLITERAL_in_arglist355); 
+            	    c=(Token)match(input,QUOTEDLITERAL,FOLLOW_QUOTEDLITERAL_in_arglist358); 
 
             	    list.add(c.getText());  
 
@@ -545,12 +560,12 @@ public class InstancerParser extends Parser {
             	    }
             	    break;
             	case 2 :
-            	    // Instancer.g:219:13: (a= topInner )
+            	    // Instancer.g:236:13: (a= topInner )
             	    {
-            	    // Instancer.g:219:13: (a= topInner )
-            	    // Instancer.g:219:15: a= topInner
+            	    // Instancer.g:236:13: (a= topInner )
+            	    // Instancer.g:236:15: a= topInner
             	    {
-            	    pushFollow(FOLLOW_topInner_in_arglist378);
+            	    pushFollow(FOLLOW_topInner_in_arglist381);
             	    a=topInner();
 
             	    state._fsp--;
@@ -591,25 +606,25 @@ public class InstancerParser extends Parser {
 
  
 
-    public static final BitSet FOLLOW_initStatements_in_top90 = new BitSet(new long[]{0x0000000000000800L});
-    public static final BitSet FOLLOW_topInner_in_top95 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_16_in_initStatements125 = new BitSet(new long[]{0x000000000002C000L});
-    public static final BitSet FOLLOW_initStatementChoice_in_initStatements128 = new BitSet(new long[]{0x0000000000002000L});
-    public static final BitSet FOLLOW_13_in_initStatements130 = new BitSet(new long[]{0x000000000002C000L});
-    public static final BitSet FOLLOW_17_in_initStatements134 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_14_in_initStatementChoice151 = new BitSet(new long[]{0x0000000000000110L});
-    public static final BitSet FOLLOW_classname_in_initStatementChoice156 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_15_in_initStatementChoice169 = new BitSet(new long[]{0x0000000000000200L});
-    public static final BitSet FOLLOW_QUOTEDLITERAL_in_initStatementChoice173 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_11_in_topInner204 = new BitSet(new long[]{0x0000000000000100L});
-    public static final BitSet FOLLOW_command_in_topInner208 = new BitSet(new long[]{0x0000000000000110L});
-    public static final BitSet FOLLOW_classname_in_topInner212 = new BitSet(new long[]{0x0000000000001A00L});
-    public static final BitSet FOLLOW_arglist_in_topInner216 = new BitSet(new long[]{0x0000000000001000L});
-    public static final BitSet FOLLOW_12_in_topInner218 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IDENTIFIER_in_command256 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_CLASSNAME_in_classname282 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_IDENTIFIER_in_classname297 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_QUOTEDLITERAL_in_arglist355 = new BitSet(new long[]{0x0000000000000A02L});
-    public static final BitSet FOLLOW_topInner_in_arglist378 = new BitSet(new long[]{0x0000000000000A02L});
+    public static final BitSet FOLLOW_initStatements_in_top92 = new BitSet(new long[]{0x0000000000000800L});
+    public static final BitSet FOLLOW_topInner_in_top97 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_16_in_initStatements127 = new BitSet(new long[]{0x000000000002C000L});
+    public static final BitSet FOLLOW_initStatementChoice_in_initStatements130 = new BitSet(new long[]{0x0000000000002000L});
+    public static final BitSet FOLLOW_13_in_initStatements132 = new BitSet(new long[]{0x000000000002C000L});
+    public static final BitSet FOLLOW_17_in_initStatements136 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_14_in_initStatementChoice153 = new BitSet(new long[]{0x0000000000000110L});
+    public static final BitSet FOLLOW_classname_in_initStatementChoice158 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_15_in_initStatementChoice171 = new BitSet(new long[]{0x0000000000000200L});
+    public static final BitSet FOLLOW_QUOTEDLITERAL_in_initStatementChoice175 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_11_in_topInner206 = new BitSet(new long[]{0x0000000000000100L});
+    public static final BitSet FOLLOW_command_in_topInner210 = new BitSet(new long[]{0x0000000000000110L});
+    public static final BitSet FOLLOW_classname_in_topInner214 = new BitSet(new long[]{0x0000000000001A00L});
+    public static final BitSet FOLLOW_arglist_in_topInner218 = new BitSet(new long[]{0x0000000000001000L});
+    public static final BitSet FOLLOW_12_in_topInner220 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IDENTIFIER_in_command258 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_CLASSNAME_in_classname285 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_IDENTIFIER_in_classname300 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_QUOTEDLITERAL_in_arglist358 = new BitSet(new long[]{0x0000000000000A02L});
+    public static final BitSet FOLLOW_topInner_in_arglist381 = new BitSet(new long[]{0x0000000000000A02L});
 
 }

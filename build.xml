@@ -82,7 +82,15 @@
            </java>
         </sequential>
     </macrodef>
-    <target name="generate-Instancer">
+    <target name="nn-generate-Instancer">
+      <uptodate property="generate-Instancer.notneeded">
+        <srcfiles dir= "${src.dir}/java/tiemens/util/instancer/antlr"
+                  includes="Instancer.g"/>
+        <mapper type="merge" 
+                to="${src.dir}/java/tiemens/util/instancer/antlr/InstancerParser.java"/>
+      </uptodate>
+    </target>
+    <target name="generate-Instancer" unless="generate-Instancer.notneeded">
       <antlr-compile  grammar.dir="src/java/tiemens/util/instancer/antlr"
                       grammar.filename="Instancer.g" />
     </target>
@@ -158,7 +166,8 @@
     <!-- ===================================================================
             All - generate .java, compile .java, run test program
          =================================================================== -->
-    <target name="all" depends="generate-Instancer, compile, test">
+    <target name="all" depends="nn-generate-Instancer, generate-Instancer, 
+                                compile, test">
     </target>
 
 </project>

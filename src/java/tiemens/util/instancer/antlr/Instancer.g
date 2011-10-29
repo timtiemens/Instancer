@@ -56,7 +56,7 @@ grammar Instancer;
 }
 
 /*
- *  if you use 'rulecatch', then you get hideous Exceptions like:
+ *  if you use 'rulecatch', then you get Exceptions like:
  *       MismatchedTokenException(11!=14) at org.antlr.runtime...
  *  It is ok, just watch how you print the message and/or the stack trace.
  */
@@ -85,29 +85,12 @@ grammar Instancer;
 
 @parser::members 
 {
-    private final InstancerCode instancerCode = new InstancerCode();
-    private InstancerLexer theLexer;
-    private void rememberLexer(InstancerLexer in)
-    { 
-        theLexer = in;
-    }
-    public List<RecognitionException> getLexerExceptions() 
-    {
-        return theLexer.getExceptions();
-    }
-    /*
-        if you do this   ... it works, but is not necessary
-    @Override
-    public void reportError(RecognitionException re)
-    {
-        theLexer.addException(re);
-    }
-    */
-    public static InstancerParser create(String[] args) throws Exception 
-    {
-        ANTLRReaderStream input = getReaderStream(args);
-        return create(input);
-    }
+    
+    /* ============================================================
+     *  Use this factory.
+     *      Do not use new InstancerParser() directly.
+     * ============================================================
+     */
     public static InstancerParser create(ANTLRReaderStream input) throws Exception
     {
         InstancerLexer lexer = new InstancerLexer(input);
@@ -119,7 +102,12 @@ grammar Instancer;
         
         return parser;
     }
-    private List<Object> result = null;
+
+    /* ============================================================
+     *  Use this return method.
+     *      Do not use parser.top() directly.
+     * ============================================================
+     */
     public List<Object> getResultOrThrow() throws Exception
     {
         if (result == null)
@@ -146,10 +134,10 @@ grammar Instancer;
 
         try 
         {
-            List<Object> thelist = parser.getResultOrThrow();
+            List<Object> list = parser.getResultOrThrow();
             
-            System.out.println("MAIN: toplist.size() = " + thelist.size());
-            Object zero = thelist.get(0);
+            System.out.println("MAIN: toplist.size() = " + list.size());
+            Object zero = list.get(0);
             System.out.println("MAIN: [0]=" + zero);
             System.out.println("MAIN: class name=" + zero.getClass().getName());
         } 
@@ -160,11 +148,28 @@ grammar Instancer;
             e.printStackTrace(System.out);
         }
     }
-    
-    public static ANTLRReaderStream getReaderStream(String[] args) throws Exception
-    {
-        return InstancerCode.MainUtils.getReaderStream(args);
+
+
+    private List<Object> result = null;
+    private final InstancerCode instancerCode = new InstancerCode();
+    private InstancerLexer theLexer;
+    private void rememberLexer(InstancerLexer in)
+    { 
+        theLexer = in;
     }
+    public List<RecognitionException> getLexerExceptions() 
+    {
+        return theLexer.getExceptions();
+    }
+    /*
+        if you do this   ... it works, but is not necessary
+     *
+    @Override
+    public void reportError(RecognitionException re)
+    {
+        theLexer.addException(re);
+    }
+    */
     /*
         if you do this, it still prints
             line 1:0 null
@@ -175,7 +180,19 @@ grammar Instancer;
         return null; 
     }
     */
+    
+    public static ANTLRReaderStream getReaderStream(String[] args) throws Exception
+    {
+        return InstancerCode.MainUtils.getReaderStream(args);
+    }
+    public static InstancerParser create(String[] args) throws Exception 
+    {
+        ANTLRReaderStream input = getReaderStream(args);
+        return create(input);
+    }
 }
+
+
 
 /*------------------------------------------------------------------
  * PARSER RULES
@@ -200,11 +217,11 @@ initStatementChoice
    
 topInner returns [Object value]
     : '(' cmd=command clz=classname args=arglist ')'   { $value = instancerCode.create($cmd.value, $clz.value, $args.list); }
-    /* | c=QUOTEDLITERAL                                  { $value = c.getText(); } */
+    /* | c=QUOTEDLITERAL                               { $value = c.getText(); } */
     ;
     
 command returns [String value] 
-    : c=IDENTIFIER { $value = $c.getText(); }
+    : c=IDENTIFIER  { $value = $c.getText(); }
     ;
 
 classname returns [String value]
